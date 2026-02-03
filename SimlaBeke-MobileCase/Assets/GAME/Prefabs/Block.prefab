@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2223474052024038530}
   - component: {fileID: 2223474052024038531}
   - component: {fileID: 2223474052024038556}
+  - component: {fileID: 7572323880887334658}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -97,3 +98,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dbab88309fe442b18749539aa0289c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileDatas:
+  - {fileID: 11400000, guid: f9fdee84d8d0b42f387a6ed5257452ed, type: 2}
+  - {fileID: 11400000, guid: e0659f89d4e10458db790a5192eab486, type: 2}
+  - {fileID: 11400000, guid: 3aeb4c38cf6b24d0ebbe55a9e941e8b1, type: 2}
+  - {fileID: 11400000, guid: a76b0fe04ebc243e88b95fbd6927e2ae, type: 2}
+  - {fileID: 11400000, guid: 472fbc1dfa48b4b99b37457cc9f839c1, type: 2}
+  spriteRenderer: {fileID: 2223474052024038531}
+--- !u!61 &7572323880887334658
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2223474052024038529}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1.2}
+    newSize: {x: 1, y: 1.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PurpleBlock
   m_EditorClassIdentifier: 
   tileIcon: {fileID: 21300000, guid: 02b1b65c0422540968eb7bcc6474e183, type: 3}
-  tileId: 3
+  tileId: B-3

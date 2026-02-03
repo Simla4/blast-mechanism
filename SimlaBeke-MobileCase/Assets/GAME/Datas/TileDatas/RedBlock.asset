@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: RedBlock
   m_EditorClassIdentifier: 
   tileIcon: {fileID: 21300000, guid: fee0820e57b7d48caa3266f307eb2f0e, type: 3}
-  tileId: 4
+  tileId: B-4

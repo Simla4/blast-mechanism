@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Baloon
   m_EditorClassIdentifier: 
   tileIcon: {fileID: 0}
-  tileId: 
+  tileId: O-1

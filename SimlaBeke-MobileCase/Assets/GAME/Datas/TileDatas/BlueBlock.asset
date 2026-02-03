@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BlueBlock
   m_EditorClassIdentifier: 
   tileIcon: {fileID: 21300000, guid: 4659312bcf3064ecc803c00fd26d4200, type: 3}
-  tileId: 1
+  tileId: B-1

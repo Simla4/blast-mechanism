@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf9ae28a26ff4f03b39adffa7d8aa26, type: 3}
   m_Name: Duck
   m_EditorClassIdentifier: 
-  tileIcon: {fileID: 0}
-  tileId: 
+  tileIcon: {fileID: 21300000, guid: 90b46a5094868420bbaec2b0424c6fd4, type: 3}
+  tileId: O-2

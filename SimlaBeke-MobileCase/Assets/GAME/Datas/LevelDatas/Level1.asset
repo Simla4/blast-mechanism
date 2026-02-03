@@ -12,6 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8641352a9689648ea8e92f2c85fd4099, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
-  gridHeight: 5
-  gridWidth: 8
+  gridHeight: 6
+  gridWidth: 5
   moveCount: 0
+  tiles:
+  - B-1
+  - B-1
+  - B-1
+  - B-2
+  - B-5
+  - B-3
+  - B-3
+  - B-2
+  - B-1
+  - B-4
+  - B-4
+  - B-4
+  - B-4
+  - B-4
+  - B-5
+  - B-4
+  - B-3
+  - B-3
+  - B-2
+  - B-2
+  - B-1
+  - B-5
+  - B-5
+  - B-5
+  - B-5
+  - B-5
+  - B-5
+  - B-5
+  - B-5
+  - B-3

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: YellowBlock
   m_EditorClassIdentifier: 
   tileIcon: {fileID: 21300000, guid: a7e0d5f6b637240f692b6660fadad5eb, type: 3}
-  tileId: 5
+  tileId: B-5
