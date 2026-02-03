@@ -16,6 +16,7 @@ public class GridManager : MonoBehaviour
     
     private Pool<TileBase> blockPool;
     private TileBase[,] gridArray;
+    private FloodFillService floodFill;
 
 
     private void Awake()
@@ -48,6 +49,13 @@ public class GridManager : MonoBehaviour
             newTile.transform.SetParent(tilesParent);
             gridArray[x, y] = newTile;
         }
+        
+        floodFill = new FloodFillService(gridArray);
+    }
+    
+    public void OnBlockClicked(Vector2Int position)
+    {
+        floodFill.Find(position);
     }
     
 }

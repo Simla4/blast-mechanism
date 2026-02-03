@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    [SerializeField] private GridManager gridManager;
+    
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -21,6 +23,7 @@ public class InputManager : MonoBehaviour
         if (hit.collider.TryGetComponent<TileBase>(out TileBase tileBase))
         {
             Debug.Log("Block clicked. ID = " + tileBase.TilePosition);
+            gridManager.OnBlockClicked(tileBase.TilePosition);
         }
     }
 }

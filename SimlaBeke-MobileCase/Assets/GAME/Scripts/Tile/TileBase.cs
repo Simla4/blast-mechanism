@@ -22,6 +22,7 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
         GetCurrentData(id);
         spriteRenderer.sprite = tileDatas[currentTileDataIndex].tileIcon;
         spriteRenderer.sortingOrder = tilePosition.y;
+        name = "tile" + tilePosition;
     }
 
     public void OnDespawned()
@@ -44,5 +45,10 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
                 currentTileDataIndex = i;
             }
         }
+    }
+
+    public string GetTileID()
+    {
+        return tileDatas[currentTileDataIndex].tileId;
     }
 }
