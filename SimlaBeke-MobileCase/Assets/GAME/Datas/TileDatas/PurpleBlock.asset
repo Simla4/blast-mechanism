@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8641352a9689648ea8e92f2c85fd4099, type: 3}
-  m_Name: Level1
+  m_Script: {fileID: 11500000, guid: 9cf9ae28a26ff4f03b39adffa7d8aa26, type: 3}
+  m_Name: PurpleBlock
   m_EditorClassIdentifier: 
-  gridHeight: 5
-  gridWidth: 8
-  moveCount: 0
+  tileIcon: {fileID: 21300000, guid: 02b1b65c0422540968eb7bcc6474e183, type: 3}
+  tileId: 3
