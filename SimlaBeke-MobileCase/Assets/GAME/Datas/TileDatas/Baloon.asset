@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf9ae28a26ff4f03b39adffa7d8aa26, type: 3}
   m_Name: Baloon
   m_EditorClassIdentifier: 
-  tileIcon: {fileID: 0}
+  tileIcon: {fileID: 21300000, guid: 99d925322a38a4d00aa43233ffd7ed0f, type: 3}
   tileId: O-1
+  tileColor: {r: 1, g: 0.31764707, b: 0.5518868, a: 0.84313726}

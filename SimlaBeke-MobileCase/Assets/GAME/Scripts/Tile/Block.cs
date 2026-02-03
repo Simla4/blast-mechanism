@@ -1,5 +1,5 @@
 
-public class Block : TileBase
+public class Block : TileBase, IMatchable
 {
     
 }
