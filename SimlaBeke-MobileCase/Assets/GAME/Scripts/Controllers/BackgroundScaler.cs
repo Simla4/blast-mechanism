@@ -17,5 +17,8 @@ public class BackgroundScaler : MonoBehaviour
             worldScreenHeight / spriteSize.y,
             1f
         );
+        
+        var camPos = Camera.main.transform.position;
+        transform.position = new Vector3(camPos.x, camPos.y, transform.position.z);
     }
 }
