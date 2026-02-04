@@ -15,3 +15,4 @@ MonoBehaviour:
   tileIcon: {fileID: 21300000, guid: 90b46a5094868420bbaec2b0424c6fd4, type: 3}
   tileId: O-2
   tileColor: {r: 1, g: 0.9451673, b: 0, a: 0.84313726}
+  tilePrefab: {fileID: 7094975999823340661, guid: fcc39d7fcbb2446018d9f6af7daccc37, type: 3}

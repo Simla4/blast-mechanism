@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using sb.eventbus;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -14,11 +15,25 @@ public class GridManager : MonoBehaviour
     [SerializeField] private float borderSpacingX = 0.11f;
     [SerializeField] private float borderSpacingY = 0.21f;
     
-    private Pool<TileBase> blockPool;
+    
     private TileBase[,] gridArray;
     private FloodFillService floodFill;
+    private EventListener<OnBlockCollected> onBlockCollected;
+    private OnAnyBlockFallEvent onAnyBlockFall = new OnAnyBlockFallEvent();
 
 
+    private void OnEnable()
+    {
+        
+        onBlockCollected = new EventListener<OnBlockCollected>(HandleTileCollection);
+        EventBus<OnBlockCollected>.AddListener(onBlockCollected);
+    }
+    
+    private void OnDisable()
+    {
+        EventBus<OnBlockCollected>.RemoveListener(onBlockCollected);
+    }
+    
     private void Awake()
     {
         ChangeBorderSize();
@@ -45,7 +60,7 @@ public class GridManager : MonoBehaviour
             
             
             Vector2Int position = new Vector2Int(x, y);
-            blockPool = PoolManager.Instance.GetPool(levelData.tiles[i].tileId);
+            var blockPool = PoolManager.Instance.GetPool(levelData.tiles[i].tileId);
             var newTile = blockPool.Spawn(position, levelData.tiles[i]);
             newTile.transform.SetParent(tilesParent);
             gridArray[x, y] = newTile;
@@ -75,12 +90,10 @@ public class GridManager : MonoBehaviour
                 NotifyNeighbors(foundTile.TilePosition);
                 gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
             
-                blockPool.ReturnToPool(foundTile);
+                PoolManager.Instance.GetPool(foundTile.GetTileID()).ReturnToPool(foundTile);
             }
         
             DropTiles();
-            
-            FillGrid();
         }
     }
     
@@ -147,6 +160,8 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+        
+        FillGrid();
     }
     
     private void FillGrid()
@@ -167,6 +182,8 @@ public class GridManager : MonoBehaviour
                     // 2. Havuzdan spawn et
                     // Pool sistemin ID (string) bekliyorsa randomData.tileId gönderiyoruz
                     Vector2Int position = new Vector2Int(x, y);
+                    
+                    var blockPool = PoolManager.Instance.GetPool(randomData.tileId);
                     var newTile = blockPool.Spawn(position, randomData);
 
                     // 3. Veriyi enjekte et (Önceki adımda konuştuğumuz gibi)
@@ -181,6 +198,19 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+        
+        EventBus<OnAnyBlockFallEvent>.Emit(onAnyBlockFall);
+    }
+    
+    private void HandleTileCollection(OnBlockCollected e)
+    {
+        var tilePos = e.tile.TilePosition;
+        
+        gridArray[tilePos.x, tilePos.y] = null;
+        var blockPool = PoolManager.Instance.GetPool(e.tile.GetTileID());
+        blockPool.ReturnToPool(e.tile);
+        
+        DropTiles();
     }
     
     private bool IsInsideGrid(Vector2Int pos)

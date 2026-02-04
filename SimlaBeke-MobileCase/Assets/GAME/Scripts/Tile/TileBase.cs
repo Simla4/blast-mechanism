@@ -20,7 +20,7 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
     public Vector2Int TilePosition{ get => tilePosition; set => tilePosition = value; }
 
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }

@@ -19,9 +19,11 @@ namespace sb.eventbus
 
         public static void Emit(T @event)
         {
-            foreach (var listener in listeners)
+            var snapshot = new List<EventListener<T>>(listeners); 
+
+            foreach (var listener in snapshot)
             {
-                listener.OnEvent.Invoke(@event);
+                listener.OnEvent?.Invoke(@event);
             }
         }
 

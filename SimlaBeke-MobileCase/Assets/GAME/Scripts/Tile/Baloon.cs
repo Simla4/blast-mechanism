@@ -23,9 +23,6 @@ public class Baloon : TileBase, IFallable, IExplodable
     {
         _isDestroyed = true;
 
-        // 1. Grid'den kendini sildir (Senin GridManager'daki metodun)
-        EventBus<OnBlockExplodedEvent>.Emit(new OnBlockExplodedEvent(this));
-
         // 2. Efektini oynat
         Debug.Log("Balon: Komşum patladı, ben de veda ediyorum!");
         
