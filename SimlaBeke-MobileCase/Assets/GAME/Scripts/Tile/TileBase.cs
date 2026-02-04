@@ -49,16 +49,11 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
         transform.localPosition = new Vector3(tilePosition.x + offsetX, tilePosition.y + offsetY, transform.localPosition.z);
     }
 
-    // private void GetCurrentData(string id)
-    // {
-    //     for (int i = 0; i < tileDatas.Count; i++)
-    //     {
-    //         if (tileDatas[i].tileId == id)
-    //         {
-    //             currentTileDataIndex = i;
-    //         }
-    //     }
-    // }
+    public void SetTilePosition(Vector2Int position)
+    {
+        tilePosition = position;
+        spriteRenderer.sortingOrder = position.y;
+    }
 
     public string GetTileID()
     {

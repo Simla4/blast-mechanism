@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using sb.eventbus;
 using UnityEngine;
 
-public class Baloon : TileBase, IFallable, IExplodable
+public class Baloon : TileBase, IExplodable
 {
     Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 

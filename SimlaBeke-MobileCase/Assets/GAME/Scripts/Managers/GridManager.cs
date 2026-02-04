@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
 
@@ -133,33 +134,37 @@ public class GridManager : MonoBehaviour
     {
         int width = gridArray.GetLength(0);
         int height = gridArray.GetLength(1);
+    
+        // 1. Bir Sequence oluştur (Animasyonları paketlemek için)
+        Sequence dropSequence = DOTween.Sequence();
+        bool hasMovement = false;
 
-        // Her bir sütun için tek tek bak
         for (int x = 0; x < width; x++)
         {
             int nextEmptyY = 0;
-
             for (int y = 0; y < height; y++)
             {
-                // Eğer o hücrede taş varsa
                 if (gridArray[x, y] != null)
                 {
-                    // Taş olması gereken yerden yukarıdaysa kaydır
                     if (y != nextEmptyY)
                     {
                         TileBase movingTile = gridArray[x, y];
-                        
                         var movementDistance = movingTile.TilePosition.y - nextEmptyY;
 
-                        // Veriyi güncelle
+                        // --- MANTIKSAL GÜNCELLEME ---
                         gridArray[x, nextEmptyY] = movingTile;
                         gridArray[x, y] = null;
-                    
-                        // Taşa yeni yerini söyle ve görseli güncelle
-                        movingTile.TilePosition = new Vector2Int(x, nextEmptyY);
+                        movingTile.SetTilePosition(new Vector2Int(x, nextEmptyY));
 
+                        // --- KOMUT OLUŞTURMA VE SEQUENCE'A EKLEME ---
                         var pos = movingTile.transform.position;
-                        movingTile.transform.position = new Vector3(pos.x, pos.y - movementDistance, 0);
+                        
+                        var cmd = new MoveCommand(movingTile, new Vector3(pos.x, pos.y - movementDistance, 0));
+                    
+                        // Join: Tüm hareketler aynı anda başlar
+                        dropSequence.Join(cmd.Execute()); 
+                    
+                        hasMovement = true;
                     }
                     nextEmptyY++;
                 }
@@ -173,38 +178,50 @@ public class GridManager : MonoBehaviour
     {
         int width = gridArray.GetLength(0);
         int height = gridArray.GetLength(1);
+    
+        Sequence fillSequence = DOTween.Sequence();
+        bool hasNewTiles = false;
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                // Eğer hücre boşsa (null ise) yeni taş lazım demektir
                 if (gridArray[x, y] == null)
                 {
-                    // 1. Rastgele bir TileData seç (LevelData içinden)
                     TileData randomData = levelData.spawnableTileTypes[UnityEngine.Random.Range(0, levelData.spawnableTileTypes.Count)];
-
-                    // 2. Havuzdan spawn et
-                    // Pool sistemin ID (string) bekliyorsa randomData.tileId gönderiyoruz
-                    Vector2Int position = new Vector2Int(x, y);
-                    
-                    var blockPool = PoolManager.Instance.GetPool(randomData.tileId);
-                    var newTile = blockPool.Spawn(position, randomData);
-
-                    // 3. Veriyi enjekte et (Önceki adımda konuştuğumuz gibi)
-                    newTile.OnSpawned(position, randomData);
                 
-                    // 4. GridManager referanslarını güncelle
+                    // 1. Koordinatları belirle
+                    Vector2Int targetPos = new Vector2Int(x, y);
+                    // Başlangıç noktası: Gridin üst sınırı + biraz ofset (Gökten düşme efekti)
+                    Vector3 spawnWorldPos = new Vector3(x + 0.61f, height + 1.5f, 0); 
+
+                    // 2. Havuzdan çek ve konumlandır
+                    var blockPool = PoolManager.Instance.GetPool(randomData.tileId);
+                    var newTile = blockPool.Spawn(targetPos, randomData);
+                    newTile.transform.position = spawnWorldPos; // Işınla (başlangıç noktasına)
                     newTile.transform.SetParent(tilesParent);
                     gridArray[x, y] = newTile;
 
-                    // 5. Görsel konumlandırma (Opsiyonel: height + 1 yaparak tepeden düşürebilirsin)
-                    // Şimdilik TileBase içindeki PlaceTile zaten position'a göre yerleştiriyor.
+                    // 3. KOMUTU ÇALIŞTIR VE SEQUENCE'A EKLE
+                    // MoveCommand zaten transform.DOMove yaptığı için targetPos'a süzülecektir
+                    var cmd = new MoveCommand(newTile, new Vector3(targetPos.x + 0.61f, targetPos.y +0.7f, 0));
+                    fillSequence.Join(cmd.Execute());
+                
+                    hasNewTiles = true;
                 }
             }
         }
-        
-        EventBus<OnAnyBlockFallEvent>.Emit(onAnyBlockFall);
+
+        if (hasNewTiles)
+        {
+            fillSequence.OnComplete(() => 
+            {
+                // Yeni taşlar yerleşti, şimdi tekrar bir eşleşme kontrolü yapılabilir
+                Debug.Log("Yeni taşlar yerleşti.");
+                EventBus<OnAnyBlockFallEvent>.Emit(onAnyBlockFall);
+                // Eğer yeni gelen taşlar da patlayabiliyorsa burada bir kontrol tetiklenebilir
+            });
+        }
     }
     
     private void HandleTileCollection(OnBlockCollected e)

@@ -2,7 +2,7 @@
 using sb.eventbus;
 using UnityEngine;
 
-public class Duck : TileBase, IFallable
+public class Duck : TileBase
 {
     private EventListener<OnAnyBlockFallEvent> onChangeAnyBlockFall;
     protected override void OnEnable()
