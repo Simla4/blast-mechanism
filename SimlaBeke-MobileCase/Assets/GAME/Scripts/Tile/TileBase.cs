@@ -18,6 +18,7 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 
     public void OnSpawned(Vector2Int position, TileData data)
     {
+        gameObject.SetActive(true);
         tilePosition = position;
         spriteRenderer.sprite = data.tileIcon;
         currentTileDataId = data.tileId;

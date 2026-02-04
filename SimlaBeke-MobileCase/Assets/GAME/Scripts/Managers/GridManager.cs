@@ -76,6 +76,8 @@ public class GridManager : MonoBehaviour
             }
         
             DropTiles();
+            
+            FillGrid();
         }
     }
     
@@ -112,6 +114,40 @@ public class GridManager : MonoBehaviour
                         movingTile.transform.position = new Vector3(pos.x, pos.y - movementDistance, 0);
                     }
                     nextEmptyY++;
+                }
+            }
+        }
+    }
+    
+    private void FillGrid()
+    {
+        int width = gridArray.GetLength(0);
+        int height = gridArray.GetLength(1);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                // Eğer hücre boşsa (null ise) yeni taş lazım demektir
+                if (gridArray[x, y] == null)
+                {
+                    // 1. Rastgele bir TileData seç (LevelData içinden)
+                    TileData randomData = levelData.spawnableTileTypes[UnityEngine.Random.Range(0, levelData.spawnableTileTypes.Count)];
+
+                    // 2. Havuzdan spawn et
+                    // Pool sistemin ID (string) bekliyorsa randomData.tileId gönderiyoruz
+                    Vector2Int position = new Vector2Int(x, y);
+                    var newTile = blockPool.Spawn(position, randomData);
+
+                    // 3. Veriyi enjekte et (Önceki adımda konuştuğumuz gibi)
+                    newTile.OnSpawned(position, randomData);
+                
+                    // 4. GridManager referanslarını güncelle
+                    newTile.transform.SetParent(tilesParent);
+                    gridArray[x, y] = newTile;
+
+                    // 5. Görsel konumlandırma (Opsiyonel: height + 1 yaparak tepeden düşürebilirsin)
+                    // Şimdilik TileBase içindeki PlaceTile zaten position'a göre yerleştiriyor.
                 }
             }
         }
