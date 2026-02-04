@@ -19,6 +19,7 @@ public class GridManager : MonoBehaviour
     private TileBase[,] gridArray;
     private FloodFillService floodFill;
     private EventListener<OnBlockCollected> onBlockCollected;
+    private EventListener<OnClickedTileEvent> onClickedTile;
     private OnAnyBlockFallEvent onAnyBlockFall = new OnAnyBlockFallEvent();
 
 
@@ -27,11 +28,15 @@ public class GridManager : MonoBehaviour
         
         onBlockCollected = new EventListener<OnBlockCollected>(HandleTileCollection);
         EventBus<OnBlockCollected>.AddListener(onBlockCollected);
+
+        onClickedTile = new EventListener<OnClickedTileEvent>(OnBlockClicked);
+        EventBus<OnClickedTileEvent>.AddListener(onClickedTile);
     }
     
     private void OnDisable()
     {
         EventBus<OnBlockCollected>.RemoveListener(onBlockCollected);
+        EventBus<OnClickedTileEvent>.RemoveListener(onClickedTile);
     }
     
     private void Awake()
@@ -69,9 +74,9 @@ public class GridManager : MonoBehaviour
         floodFill = new FloodFillService(gridArray);
     }
     
-    public void OnBlockClicked(Vector2Int position)
+    public void OnBlockClicked(OnClickedTileEvent e)
     {
-        var foundTiles = floodFill.Find(position);
+        var foundTiles = floodFill.Find(e.position);
 
         if (foundTiles != null)
         {

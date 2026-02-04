@@ -1,8 +1,8 @@
+using sb.eventbus;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    [SerializeField] private GridManager gridManager;
     
     private void Update()
     {
@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
         if (hit.collider.TryGetComponent<TileBase>(out TileBase tileBase))
         {
             Debug.Log("Block clicked. ID = " + tileBase.TilePosition);
-            gridManager.OnBlockClicked(tileBase.TilePosition);
+            EventBus<OnClickedTileEvent>.Emit(new OnClickedTileEvent(tileBase.TilePosition));
         }
     }
 }
