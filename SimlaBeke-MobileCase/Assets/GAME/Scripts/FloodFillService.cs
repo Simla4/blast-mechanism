@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class FloodFillService
 {
     private TileBase[,] grid;
-    
     
     private List<Vector2Int> directions = new List<Vector2Int>
     {
@@ -21,16 +19,16 @@ public class FloodFillService
         this.grid = grid;
     }
 
-    public void Find(Vector2Int targetGrid)
+    public List<TileBase> Find(Vector2Int targetGrid)
     {
         Debug.Log("grid width: " + grid.GetLength(0) + " grid height: " + grid.GetLength(1) + " target grid: " + targetGrid);
         
-        if(!grid[targetGrid.x, targetGrid.y].TryGetComponent<IMatchable>(out IMatchable matchable)) return;
+        if(!grid[targetGrid.x, targetGrid.y].TryGetComponent<IMatchable>(out IMatchable matchable)) return null;
         
         TileBase startTile = grid[targetGrid.x, targetGrid.y];
         
         if (targetGrid.x < 0 || targetGrid.x >= grid.GetLength(0) || 
-            targetGrid.y < 0 || targetGrid.y >= grid.GetLength(1)) return;
+            targetGrid.y < 0 || targetGrid.y >= grid.GetLength(1)) return null;
         
         List<TileBase> foundTiles = new List<TileBase>();
         HashSet<TileBase> visited = new HashSet<TileBase>();
@@ -39,8 +37,6 @@ public class FloodFillService
         foundTiles.Add(startTile);
         visited.Add(startTile);
         int index = 0;
-        
-        foundTiles.Add(grid[targetGrid.x, targetGrid.y]);
 
         while (index < foundTiles.Count)
         {
@@ -70,9 +66,55 @@ public class FloodFillService
         
         Debug.Log("Toplam " + foundTiles.Count + " eşleşen tile bulundu ve gizleniyor.");
     
-        foreach (TileBase tile in foundTiles)
+        
+        // TO-DO: Burası ayrılacka. Ayrı methoda alıncak. Oyun tekrar incelenip duruma göre coroutine de eklenecek.
+        
+        return foundTiles;
+    }
+
+    public void DropTiles(List<TileBase> foundTiles)
+    {
+        // 1. Önce patlayanları grid'den sil
+        foreach (var tile in foundTiles)
         {
-            tile.gameObject.SetActive(false);
+            grid[tile.TilePosition.x, tile.TilePosition.y] = null;
+        }
+
+        // 2. Sadece etkilenen sütunları al
+        HashSet<int> columns = new HashSet<int>();
+        foreach (var tile in foundTiles) columns.Add(tile.TilePosition.x);
+
+        foreach (int x in columns)
+        {
+            int height = grid.GetLength(1);
+            int nextEmptyY = 0; // Bu sütunda bulduğumuz en alttaki boşluğun indexi
+
+            // Sütunu aşağıdan yukarıya doğru tara
+            for (int y = 0; y < height; y++)
+            {
+                // Eğer hücre doluysa
+                if (grid[x, y] != null)
+                {
+                    // Eğer bu taş, olması gereken yerden (nextEmptyY) daha yukarıdaysa aşağı kaydır
+                    if (y != nextEmptyY)
+                    {
+                        TileBase movingTile = grid[x, y];
+
+                        // --- VERİ GÜNCELLEME ---
+                        grid[x, nextEmptyY] = movingTile;
+                        grid[x, y] = null;
+                        var movementDistance = movingTile.TilePosition.y - nextEmptyY;
+                        movingTile.TilePosition = new Vector2Int(x, nextEmptyY);
+
+                        // --- GÖRSEL GÜNCELLEME ---
+                        var pos = movingTile.transform.position;
+                        movingTile.transform.position = new Vector3(pos.x, pos.y - movementDistance, 0);
+                    }
+                
+                    // Bir sonraki boş yer, bu dolu taşın hemen üstü olacak
+                    nextEmptyY++;
+                }
+            }
         }
     }
 }
