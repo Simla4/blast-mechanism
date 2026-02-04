@@ -55,7 +55,25 @@ public class GridManager : MonoBehaviour
     
     public void OnBlockClicked(Vector2Int position)
     {
-        floodFill.Find(position);
+        var foundTiles = floodFill.Find(position);
+
+        if (foundTiles != null)
+        {
+            DestroyBlocks(foundTiles);
+        }
+    }
+
+    private void DestroyBlocks(List<TileBase> foundTiles)
+    {
+        if (foundTiles.Count > 2)
+        {
+            for (int i = 0; i < foundTiles.Count; i++)
+            {
+                blockPool.ReturnToPool(foundTiles[i]);
+                Debug.Log(foundTiles[i] + "returned to pool");
+
+            }
+        }
     }
     
 }
