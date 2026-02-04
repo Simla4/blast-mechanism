@@ -31,7 +31,7 @@ public class Pool<T> : PoolBase where T : Component
         }
     }
 
-    public T Spawn(Vector2Int position, string id)
+    public T Spawn(Vector2Int position, TileData tileData)
     {
         if (inactive.Count > 0)
         {
@@ -40,7 +40,7 @@ public class Pool<T> : PoolBase where T : Component
             
             if (item.TryGetComponent(out ISpawned iSpawn))
             {
-                iSpawn.OnSpawned(position, id);
+                iSpawn.OnSpawned(position, tileData);
             }
             
             return item;
@@ -49,7 +49,7 @@ public class Pool<T> : PoolBase where T : Component
         
         if (clone.TryGetComponent(out ISpawned iSpawned))
         {
-            iSpawned.OnSpawned(position, id);
+            iSpawned.OnSpawned(position, tileData);
         }
         
         active.Add(clone);

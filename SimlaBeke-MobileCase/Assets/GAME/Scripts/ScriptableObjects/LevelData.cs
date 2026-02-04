@@ -8,5 +8,5 @@ public class LevelData : ScriptableObject
     public int gridHeight;
     public int gridWidth;
     public int moveCount;
-    public List<string> tiles;
+    public List<TileData> tiles;
 }

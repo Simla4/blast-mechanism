@@ -65,15 +65,55 @@ public class GridManager : MonoBehaviour
 
     private void DestroyBlocks(List<TileBase> foundTiles)
     {
-        if (foundTiles.Count > 2)
+        if (foundTiles.Count >= 2)
         {
             for (int i = 0; i < foundTiles.Count; i++)
             {
+                gridArray[foundTiles[i].TilePosition.x, foundTiles[i].TilePosition.y] = null;
+            
                 blockPool.ReturnToPool(foundTiles[i]);
-                Debug.Log(foundTiles[i] + "returned to pool");
-
+                Debug.Log(foundTiles[i] + " returned to pool");
             }
+        
+            DropTiles();
         }
     }
     
+    private void DropTiles()
+    {
+        int width = gridArray.GetLength(0);
+        int height = gridArray.GetLength(1);
+
+        // Her bir sütun için tek tek bak
+        for (int x = 0; x < width; x++)
+        {
+            int nextEmptyY = 0;
+
+            for (int y = 0; y < height; y++)
+            {
+                // Eğer o hücrede taş varsa
+                if (gridArray[x, y] != null)
+                {
+                    // Taş olması gereken yerden yukarıdaysa kaydır
+                    if (y != nextEmptyY)
+                    {
+                        TileBase movingTile = gridArray[x, y];
+                        
+                        var movementDistance = movingTile.TilePosition.y - nextEmptyY;
+
+                        // Veriyi güncelle
+                        gridArray[x, nextEmptyY] = movingTile;
+                        gridArray[x, y] = null;
+                    
+                        // Taşa yeni yerini söyle ve görseli güncelle
+                        movingTile.TilePosition = new Vector2Int(x, nextEmptyY);
+
+                        var pos = movingTile.transform.position;
+                        movingTile.transform.position = new Vector3(pos.x, pos.y - movementDistance, 0);
+                    }
+                    nextEmptyY++;
+                }
+            }
+        }
+    }
 }
