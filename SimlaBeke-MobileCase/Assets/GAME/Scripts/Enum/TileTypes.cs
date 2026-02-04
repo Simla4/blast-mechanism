@@ -9,6 +9,5 @@ public enum TileTypes
     PurpleBlock,
     Baloon,
     Duck,
-    RocketVerticalMove,
-    RocketHorizontalMove
+    Rocket
 }

@@ -26,7 +26,6 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        blockPool = PoolManager.Instance.blockPool;
         gridArray = new TileBase[levelData.gridWidth, levelData.gridHeight];
         
         CreateBord();
@@ -44,7 +43,9 @@ public class GridManager : MonoBehaviour
             int x = i % levelData.gridWidth;
             int y = i / (levelData.gridWidth);
             
+            
             Vector2Int position = new Vector2Int(x, y);
+            blockPool = PoolManager.Instance.GetPool(levelData.tiles[i].tileId);
             var newTile = blockPool.Spawn(position, levelData.tiles[i]);
             newTile.transform.SetParent(tilesParent);
             gridArray[x, y] = newTile;
