@@ -641,7 +641,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85d004d38df7a4438982701974d237b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockPrefab: {fileID: 2223474052024038556, guid: 78f429057d86848fea1e5ee6cdacc9a7, type: 3}
+  allTiles:
+  - {fileID: 11400000, guid: f9fdee84d8d0b42f387a6ed5257452ed, type: 2}
+  - {fileID: 11400000, guid: e0659f89d4e10458db790a5192eab486, type: 2}
+  - {fileID: 11400000, guid: 3aeb4c38cf6b24d0ebbe55a9e941e8b1, type: 2}
+  - {fileID: 11400000, guid: a76b0fe04ebc243e88b95fbd6927e2ae, type: 2}
+  - {fileID: 11400000, guid: 472fbc1dfa48b4b99b37457cc9f839c1, type: 2}
 --- !u!1 &1451363350
 GameObject:
   m_ObjectHideFlags: 0

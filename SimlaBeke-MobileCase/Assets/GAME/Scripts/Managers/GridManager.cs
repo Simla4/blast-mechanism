@@ -70,15 +70,44 @@ public class GridManager : MonoBehaviour
         {
             for (int i = 0; i < foundTiles.Count; i++)
             {
-                gridArray[foundTiles[i].TilePosition.x, foundTiles[i].TilePosition.y] = null;
+                var foundTile = foundTiles[i];
+                
+                NotifyNeighbors(foundTile.TilePosition);
+                gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
             
-                blockPool.ReturnToPool(foundTiles[i]);
-                Debug.Log(foundTiles[i] + " returned to pool");
+                blockPool.ReturnToPool(foundTile);
             }
         
             DropTiles();
             
             FillGrid();
+        }
+    }
+    
+    public void NotifyNeighbors(Vector2Int explodedPos)
+    {
+        Vector2Int[] neighbors = {
+            explodedPos + Vector2Int.up,
+            explodedPos + Vector2Int.down,
+            explodedPos + Vector2Int.left,
+            explodedPos + Vector2Int.right
+        };
+
+        foreach (var targetPos in neighbors)
+        {
+            // 1. Grid sınırları içinde mi?
+            if (IsInsideGrid(targetPos))
+            {
+                TileBase neighborTile = gridArray[targetPos.x, targetPos.y];
+
+                // 2. Orada bir taş var mı ve bu taş patlamayla ilgileniyor mu?
+                if (neighborTile != null && neighborTile is IExplodable listener)
+                {
+                    // 3. Kararı ona bırakıyoruz!
+                    listener.OnNeighborExploded();
+                    gridArray[targetPos.x, targetPos.y] = null;
+                }
+            }
         }
     }
     
@@ -152,5 +181,10 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+    }
+    
+    private bool IsInsideGrid(Vector2Int pos)
+    {
+        return pos.x >= 0 && pos.x < levelData.gridWidth && pos.y >= 0 && pos.y < levelData.gridHeight;
     }
 }

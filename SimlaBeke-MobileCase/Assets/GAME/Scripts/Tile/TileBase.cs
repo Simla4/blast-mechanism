@@ -1,20 +1,30 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 {
-    [Header("Refferances")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
 
     [Header("Tile Properties")] 
     [SerializeField] private float offsetX = 0.61f;
     [SerializeField] private float offsetY = 0.7f;
     
-    private TileData tileData;
+    protected TileData tileData;
+    
+    private SpriteRenderer spriteRenderer;
     private string currentTileDataId;
     private Vector2Int tilePosition;
     
     public Vector2Int TilePosition{ get => tilePosition; set => tilePosition = value; }
+
+
+    private void OnEnable()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
 
     public void OnSpawned(Vector2Int position, TileData data)
     {
