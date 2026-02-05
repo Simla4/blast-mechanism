@@ -7,7 +7,7 @@ public class MoveCommand : ICommand
     private Vector3 targetPos;
     private Tween moveTween;
     
-    public float Duration => 0.3f;
+    public float Duration => 0.1f;
 
     public MoveCommand(TileBase tile, Vector3 targetPos)
     {
@@ -21,8 +21,8 @@ public class MoveCommand : ICommand
         {
             moveTween.Kill();
         }
-        moveTween = tile.transform.DOMove(new Vector3(targetPos.x, targetPos.y, 0), 0.3f)
-            .SetEase(Ease.OutBounce);
+        moveTween = tile.transform.DOMove(new Vector3(targetPos.x, targetPos.y, 0), Duration)
+            .SetEase(Ease.Linear);
 
         return moveTween;
     }
