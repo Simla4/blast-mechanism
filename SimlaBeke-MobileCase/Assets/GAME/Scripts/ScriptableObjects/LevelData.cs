@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -11,4 +12,12 @@ public class LevelData : ScriptableObject
     public int moveCount;
     public List<TileData> tiles;
     public List<TileData> spawnableTileTypes;
+    public List<LevelGoals> levelGoals;
+}
+
+[Serializable]
+public class LevelGoals
+{
+    public int count;
+    public TileData goalType;
 }

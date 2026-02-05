@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using sb.eventbus;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Baloon : TileBase, IExplodable
@@ -20,11 +21,9 @@ public class Baloon : TileBase, IExplodable
     private void ExecuteExplosion()
     {
         _isDestroyed = true;
-
-        // 2. Efektini oynat
-        Debug.Log("Balon: Komşum patladı, ben de veda ediyorum!");
         
-        // 3. Havuza geri dön
+        EventBus<OnBlockCollected>.Emit(new OnBlockCollected(this, tileData));
+        
         tilePool = PoolManager.Instance.GetPool(tileData.tileId);
         tilePool.ReturnToPool(this);
     }
