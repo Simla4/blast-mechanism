@@ -100,17 +100,19 @@ public class GridManager : MonoBehaviour
     {
         if (foundTiles.Count >= 2)
         {
-            // 5+ ise roketi oyuncunun etkileşime girdiği ilk blok konumunda oluşturacağız
-            Vector2Int rocketSpawnPos = foundTiles[0].TilePosition;
-
             for (int i = 0; i < foundTiles.Count; i++)
             {
                 var foundTile = foundTiles[i];
-                NotifyNeighbors(foundTile.TilePosition);
                 gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
                 PoolManager.Instance.GetPool(foundTile.GetTileID()).ReturnToPool(foundTile);
+                //TO-DO: Pool'a geri gönderme işini kendi içinde yapsın ki farklı bir animasyon oynarsa animasyon bittikten sonra pool'a geri dönsün
             }
-    
+            
+            foreach (var foundTile in foundTiles)
+            {
+                NotifyNeighbors(foundTile.TilePosition);
+            }
+            
             CheckAndSpawnPowerUp(foundTiles.Count, foundTiles[0].TilePosition);
 
             DropTiles();
