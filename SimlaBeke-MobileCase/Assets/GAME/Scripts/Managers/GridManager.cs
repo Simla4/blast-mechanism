@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GridManager : MonoBehaviour
 {
@@ -13,8 +14,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform tilesParent;
 
     [Header("Grid Properties")] 
-    [SerializeField] private float borderSpacingX = 0.11f;
-    [SerializeField] private float borderSpacingY = 0.21f;
+    [SerializeField] private Vector2 padding = new Vector2(0.11f, 0.21f);
+    [SerializeField] private float cellSize = 1.0f; 
+    [SerializeField] private float spawnYOffset = 1.5f;
     
     
     private TileBase[,] gridArray;
@@ -54,7 +56,7 @@ public class GridManager : MonoBehaviour
 
     private void ChangeBorderSize()
     {
-        borderSpriteRenderer.size = new Vector2(levelData.gridWidth + borderSpacingX, levelData.gridHeight + borderSpacingY);
+        borderSpriteRenderer.size = new Vector2(levelData.gridWidth + padding.x, levelData.gridHeight + padding.y);
     }
 
     private void CreateBord()
@@ -69,6 +71,7 @@ public class GridManager : MonoBehaviour
             var blockPool = PoolManager.Instance.GetPool(levelData.tiles[i].tileId);
             var newTile = blockPool.Spawn(position, levelData.tiles[i]);
             newTile.transform.SetParent(tilesParent);
+            newTile.transform.position = GetWorldPosition(position);
             gridArray[x, y] = newTile;
         }
         
@@ -132,81 +135,60 @@ public class GridManager : MonoBehaviour
     
     private void DropTiles()
     {
-        int width = gridArray.GetLength(0);
-        int height = gridArray.GetLength(1);
-    
-        // 1. Bir Sequence oluştur (Animasyonları paketlemek için)
         Sequence dropSequence = DOTween.Sequence();
-        bool hasMovement = false;
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < gridArray.GetLength(0); x++)
         {
             int nextEmptyY = 0;
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < gridArray.GetLength(1); y++)
             {
                 if (gridArray[x, y] != null)
                 {
                     if (y != nextEmptyY)
                     {
                         TileBase movingTile = gridArray[x, y];
-                        var movementDistance = movingTile.TilePosition.y - nextEmptyY;
-
-                        // --- MANTIKSAL GÜNCELLEME ---
                         gridArray[x, nextEmptyY] = movingTile;
                         gridArray[x, y] = null;
                         movingTile.SetTilePosition(new Vector2Int(x, nextEmptyY));
 
-                        // --- KOMUT OLUŞTURMA VE SEQUENCE'A EKLEME ---
-                        var pos = movingTile.transform.position;
-                        
-                        var cmd = new MoveCommand(movingTile, new Vector3(pos.x, pos.y - movementDistance, 0));
-                    
-                        // Join: Tüm hareketler aynı anda başlar
-                        dropSequence.Join(cmd.Execute()); 
-                    
-                        hasMovement = true;
+                        // Komut artık tertemiz: "Hangi taş, hangi grid koordinatına?"
+                        var cmd = new MoveCommand(movingTile, movingTile.TilePosition, this);
+                        dropSequence.Join(cmd.Execute());
                     }
                     nextEmptyY++;
                 }
             }
         }
-        
         FillGrid();
     }
     
     private void FillGrid()
     {
-        int width = gridArray.GetLength(0);
-        int height = gridArray.GetLength(1);
-    
         Sequence fillSequence = DOTween.Sequence();
         bool hasNewTiles = false;
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < gridArray.GetLength(0); x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < gridArray.GetLength(1); y++)
             {
                 if (gridArray[x, y] == null)
                 {
-                    TileData randomData = levelData.spawnableTileTypes[UnityEngine.Random.Range(0, levelData.spawnableTileTypes.Count)];
-                
-                    // 1. Koordinatları belirle
+                    TileData randomData = levelData.spawnableTileTypes[Random.Range(0, levelData.spawnableTileTypes.Count)];
                     Vector2Int targetPos = new Vector2Int(x, y);
-                    // Başlangıç noktası: Gridin üst sınırı + biraz ofset (Gökten düşme efekti)
-                    Vector3 spawnWorldPos = new Vector3(x + 0.61f, height + 1.5f, 0); 
 
-                    // 2. Havuzdan çek ve konumlandır
+                    // Spawn Pozisyonu: Hedef X, Grid Tepesi + Ofset
+                    Vector3 spawnWorldPos = GetWorldPosition(new Vector2Int(x, levelData.gridHeight));
+                    spawnWorldPos.y += spawnYOffset;
+
                     var blockPool = PoolManager.Instance.GetPool(randomData.tileId);
                     var newTile = blockPool.Spawn(targetPos, randomData);
-                    newTile.transform.position = spawnWorldPos; // Işınla (başlangıç noktasına)
+                    
+                    newTile.transform.position = spawnWorldPos;
                     newTile.transform.SetParent(tilesParent);
                     gridArray[x, y] = newTile;
 
-                    // 3. KOMUTU ÇALIŞTIR VE SEQUENCE'A EKLE
-                    // MoveCommand zaten transform.DOMove yaptığı için targetPos'a süzülecektir
-                    var cmd = new MoveCommand(newTile, new Vector3(targetPos.x + 0.61f, targetPos.y +0.7f, 0));
+                    var cmd = new MoveCommand(newTile, targetPos, this);
                     fillSequence.Join(cmd.Execute());
-                
                     hasNewTiles = true;
                 }
             }
@@ -214,13 +196,7 @@ public class GridManager : MonoBehaviour
 
         if (hasNewTiles)
         {
-            fillSequence.OnComplete(() => 
-            {
-                // Yeni taşlar yerleşti, şimdi tekrar bir eşleşme kontrolü yapılabilir
-                Debug.Log("Yeni taşlar yerleşti.");
-                EventBus<OnAnyBlockFallEvent>.Emit(onAnyBlockFall);
-                // Eğer yeni gelen taşlar da patlayabiliyorsa burada bir kontrol tetiklenebilir
-            });
+            fillSequence.OnComplete(() => EventBus<OnAnyBlockFallEvent>.Emit(onAnyBlockFall));
         }
     }
     
@@ -238,5 +214,14 @@ public class GridManager : MonoBehaviour
     private bool IsInsideGrid(Vector2Int pos)
     {
         return pos.x >= 0 && pos.x < levelData.gridWidth && pos.y >= 0 && pos.y < levelData.gridHeight;
+    }
+    
+    public Vector3 GetWorldPosition(Vector2Int gridPos)
+    {
+        // Formül: (Grid Koordinatı * Hücre Boyutu) + Board Boşluğu + (Hücre Boyutu / 2)
+        // Bu formül sayesinde blok boyutu değişse de pivot Center'da kalsa da her şey milimetrik oturur.
+        float x = (gridPos.x * cellSize) + padding.x + (cellSize / 2f);
+        float y = (gridPos.y * cellSize) + padding.y + (cellSize / 2f);
+        return new Vector3(x, y, 0);
     }
 }

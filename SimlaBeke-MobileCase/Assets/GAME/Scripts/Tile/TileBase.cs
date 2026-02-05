@@ -34,7 +34,6 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
         currentTileDataId = data.tileId;
         tileData = data;
     
-        PlaceTile(position);
         spriteRenderer.sortingOrder = position.y;
     }
 
@@ -43,11 +42,11 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
         gameObject.SetActive(false);
     }
 
-    private void PlaceTile(Vector2Int position)
-    {
-        tilePosition = position;
-        transform.localPosition = new Vector3(tilePosition.x + offsetX, tilePosition.y + offsetY, transform.localPosition.z);
-    }
+    // private void PlaceTile(Vector2Int position)
+    // {
+    //     tilePosition = position;
+    //     transform.localPosition = new Vector3(tilePosition.x + offsetX, tilePosition.y + offsetY, transform.localPosition.z);
+    // }
 
     public void SetTilePosition(Vector2Int position)
     {

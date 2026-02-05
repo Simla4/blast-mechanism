@@ -4,15 +4,17 @@ using UnityEngine;
 public class MoveCommand : ICommand
 {
     private TileBase tile;
-    private Vector3 targetPos;
+    private Vector2Int targetGridPos;
+    private GridManager gridManager;
     private Tween moveTween;
     
     public float Duration => 0.1f;
 
-    public MoveCommand(TileBase tile, Vector3 targetPos)
+    public MoveCommand(TileBase tile, Vector2Int targetGridPos, GridManager gridManager)
     {
         this.tile = tile;
-        this.targetPos = targetPos;
+        this.targetGridPos = targetGridPos;
+        this.gridManager = gridManager;
     }
 
     public Tween Execute()
@@ -21,7 +23,10 @@ public class MoveCommand : ICommand
         {
             moveTween.Kill();
         }
-        moveTween = tile.transform.DOMove(new Vector3(targetPos.x, targetPos.y, 0), Duration)
+        
+        Vector3 targetWorldPos = gridManager.GetWorldPosition(targetGridPos);
+        
+        moveTween = tile.transform.DOMove(targetWorldPos, Duration)
             .SetEase(Ease.Linear);
 
         return moveTween;
