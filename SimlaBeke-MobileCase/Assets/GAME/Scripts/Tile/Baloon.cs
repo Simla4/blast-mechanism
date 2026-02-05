@@ -12,8 +12,6 @@ public class Baloon : TileBase, IExplodable
 
     public void OnNeighborExploded()
     {
-        // Karar mekanizması burada: 
-        // Eğer zaten patlıyorsa veya özel bir şartın varsa (örn: 2 can) burada kontrol edersin.
         if (_isDestroyed) return;
 
         ExecuteExplosion();

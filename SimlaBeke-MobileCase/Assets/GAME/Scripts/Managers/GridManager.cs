@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class GridManager : MonoBehaviour
 {
     [Header("Refferances")]
     [SerializeField] private LevelData levelData;
+    [SerializeField] private GameSettings gameSettings;
     [SerializeField] private SpriteRenderer borderSpriteRenderer;
     [SerializeField] private Transform tilesParent;
 
@@ -23,6 +25,8 @@ public class GridManager : MonoBehaviour
     private FloodFillService floodFill;
     private EventListener<OnBlockCollected> onBlockCollected;
     private EventListener<OnClickedTileEvent> onClickedTile;
+    private EventListener<OnRocketActivated> onRocketActivated;
+
     private OnAnyBlockFallEvent onAnyBlockFall = new OnAnyBlockFallEvent();
 
 
@@ -34,12 +38,16 @@ public class GridManager : MonoBehaviour
 
         onClickedTile = new EventListener<OnClickedTileEvent>(OnBlockClicked);
         EventBus<OnClickedTileEvent>.AddListener(onClickedTile);
+
+        onRocketActivated = new EventListener<OnRocketActivated>(HandleRocketActivated);
+        EventBus<OnRocketActivated>.AddListener(onRocketActivated);
     }
     
     private void OnDisable()
     {
         EventBus<OnBlockCollected>.RemoveListener(onBlockCollected);
         EventBus<OnClickedTileEvent>.RemoveListener(onClickedTile);
+        EventBus<OnRocketActivated>.RemoveListener(onRocketActivated);
     }
     
     private void Awake()
@@ -92,18 +100,48 @@ public class GridManager : MonoBehaviour
     {
         if (foundTiles.Count >= 2)
         {
+            // 5+ ise roketi oyuncunun etkileşime girdiği ilk blok konumunda oluşturacağız
+            Vector2Int rocketSpawnPos = foundTiles[0].TilePosition;
+
             for (int i = 0; i < foundTiles.Count; i++)
             {
                 var foundTile = foundTiles[i];
-                
                 NotifyNeighbors(foundTile.TilePosition);
                 gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
-            
                 PoolManager.Instance.GetPool(foundTile.GetTileID()).ReturnToPool(foundTile);
             }
-        
+    
+            CheckAndSpawnPowerUp(foundTiles.Count, foundTiles[0].TilePosition);
+
             DropTiles();
         }
+    }
+
+    private void CheckAndSpawnPowerUp(int count, Vector2Int pos)
+    {
+        // Eşikleri büyükten küçüğe kontrol et ki 7 patladıysa 5'liği değil 7'liği versin
+        // (Bunun için listeyi Inspector'da büyükten küçüğe dizebiliriz veya koda .OrderByDescending ekleyebiliriz)
+    
+        foreach (var threshold in gameSettings.powerUpThresholds)
+        {
+            if (count >= threshold.requiredCount)
+            {
+                SpawnPowerUp(threshold.powerUpData, pos);
+                break; // En yüksek eşiği bulduk, çıkıyoruz
+            }
+        }
+    }
+
+    private void SpawnPowerUp(TileData powerupData, Vector2Int pos)
+    {
+        // Eğer id "Rocket" ise rastgele yön seç, değilse direkt id ile spawn et
+        
+        var pool = PoolManager.Instance.GetPool(powerupData.tileId);
+        var newPowerUp = pool.Spawn(pos, powerupData);
+    
+        newPowerUp.transform.SetParent(tilesParent);
+        newPowerUp.transform.position = GetWorldPosition(pos);
+        gridArray[pos.x, pos.y] = newPowerUp;
     }
     
     public void NotifyNeighbors(Vector2Int explodedPos)
@@ -209,6 +247,49 @@ public class GridManager : MonoBehaviour
         blockPool.ReturnToPool(e.tile);
         
         DropTiles();
+    }
+
+    private void HandleRocketActivated(OnRocketActivated e)
+    {
+        if (e.direction == RocketDirections.Horizontal)
+            ClearRow(e.position.y);
+        else
+            ClearColumn(e.position.x);
+    }
+    
+    public void ClearRow(int rowY)
+    {
+        for (int x = 0; x < levelData.gridWidth; x++)
+        {
+            ClearAt(x, rowY);
+        }
+        DropTiles();
+    }
+
+    public void ClearColumn(int colX)
+    {
+        for (int y = 0; y < levelData.gridHeight; y++)
+        {
+            ClearAt(colX, y);
+        }
+        DropTiles();
+    }
+
+    private void ClearAt(int x, int y)
+    {
+        TileBase tile = gridArray[x, y];
+    
+        // Eğer hücre boşsa veya içinde ÖRDEK varsa dokunmuyoruz (Ördek patlamaz)
+        if (tile == null || tile is Duck) return;
+
+        // Eğer roketin çarptığı şey bir BALON ise IExplodable tetiklenir
+        if (tile is IExplodable explodable)
+        {
+            explodable.OnNeighborExploded(); // Balon kendini yok eder
+        }
+    
+        gridArray[x, y] = null;
+        PoolManager.Instance.GetPool(tile.GetTileID()).ReturnToPool(tile);
     }
     
     private bool IsInsideGrid(Vector2Int pos)

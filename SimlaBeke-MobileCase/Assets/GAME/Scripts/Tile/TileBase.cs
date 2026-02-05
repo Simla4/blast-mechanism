@@ -6,11 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 {
-
-    [Header("Tile Properties")] 
-    [SerializeField] private float offsetX = 0.61f;
-    [SerializeField] private float offsetY = 0.7f;
-    
     protected TileData tileData;
     
     private SpriteRenderer spriteRenderer;

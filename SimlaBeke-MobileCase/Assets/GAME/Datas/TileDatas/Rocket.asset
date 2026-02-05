@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf9ae28a26ff4f03b39adffa7d8aa26, type: 3}
   m_Name: Rocket
   m_EditorClassIdentifier: 
-  tileIcon: {fileID: 0}
+  tileIcon: {fileID: 21300000, guid: 6e4400a4157e24793af2204529038a10, type: 3}
   tileId: SI-1
   tileColor: {r: 0, g: 0, b: 1, a: 0.84313726}
+  tilePrefab: {fileID: 2592595870221416646, guid: d6b90f3275e3b473a920f4d962583b0b, type: 3}

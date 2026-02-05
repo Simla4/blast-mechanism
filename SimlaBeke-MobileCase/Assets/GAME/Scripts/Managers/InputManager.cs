@@ -19,10 +19,16 @@ public class InputManager : MonoBehaviour
 
         if (hit.collider == null)
             return;
+
+
+        if (hit.collider.TryGetComponent<IClickable>(out var clickable))
+        {
+            clickable.OnClickedTileEvent();
+            return;
+        }
         
         if (hit.collider.TryGetComponent<TileBase>(out TileBase tileBase))
         {
-            Debug.Log("Block clicked. ID = " + tileBase.TilePosition);
             EventBus<OnClickedTileEvent>.Emit(new OnClickedTileEvent(tileBase.TilePosition));
         }
     }
