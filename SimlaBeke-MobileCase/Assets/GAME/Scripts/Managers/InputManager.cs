@@ -24,12 +24,6 @@ public class InputManager : MonoBehaviour
         if (hit.collider.TryGetComponent<IClickable>(out var clickable))
         {
             clickable.OnClickedTileEvent();
-            return;
-        }
-        
-        if (hit.collider.TryGetComponent<TileBase>(out TileBase tileBase))
-        {
-            EventBus<OnClickedTileEvent>.Emit(new OnClickedTileEvent(tileBase.TilePosition));
         }
     }
 }

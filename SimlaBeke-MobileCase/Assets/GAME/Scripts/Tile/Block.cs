@@ -2,7 +2,7 @@
 using sb.eventbus;
 using UnityEngine;
 
-public class Block : TileBase, IMatchable
+public class Block : TileBase, IMatchable, IClickable
 {
     public void ExplodeTile()
     {
@@ -13,5 +13,11 @@ public class Block : TileBase, IMatchable
         var tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);
         
+    }
+
+    public void OnClickedTileEvent()
+    {
+        EventBus<OnClickedTileEvent>.Emit(new OnClickedTileEvent(TilePosition));
+
     }
 }
