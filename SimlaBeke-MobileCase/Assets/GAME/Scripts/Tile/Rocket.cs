@@ -16,6 +16,8 @@ using sb.eventbus;
       private Vector3 visualPartAStartPosition;
       private Vector3 visualPartBStartPosition;
       private Pool<TileBase> tilePool;
+      private Tween visualPartATween;
+      private Tween visualPartBTween;
 
       public RocketDirections Direction => direction;
 
@@ -35,7 +37,6 @@ using sb.eventbus;
 
       public void OnClickedTileEvent()
       {
-          // 1) Board temizliği – görselden bağımsız, hemen
           EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration));
 
           AnimateRocket();
@@ -45,12 +46,10 @@ using sb.eventbus;
       {
           if (direction == RocketDirections.Vertical)
           {
-              // Roketi dikey yapmak için Z ekseninde 90 derece döndür
               transform.localRotation = Quaternion.Euler(0, 0, 90);
           }
           else
           {
-              // Yatay ise rotasyonu sıfırla (0,0,0)
               transform.localRotation = Quaternion.identity;
           }
       }
@@ -63,15 +62,25 @@ using sb.eventbus;
 
           float dynamicDistance = (direction == RocketDirections.Horizontal) ? screenWidth : screenHeight;
 
+          if (visualPartATween != null)
+          {
+              visualPartATween.Kill();
+          }
+
+          if (visualPartBTween != null)
+          {
+              visualPartBTween.Kill();
+          }
+          
           if (direction == RocketDirections.Horizontal)
           {
-              visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration);
-              visualPartA.transform.DOLocalMoveX(dynamicDistance, duration).OnComplete(OnAnimationComplete);
+              visualPartATween = visualPartA.transform.DOLocalMoveX(dynamicDistance, duration);
+              visualPartBTween = visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration).OnComplete(OnAnimationComplete);
           }
           else
           {
-              visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration);
-              visualPartA.transform.DOLocalMoveX(dynamicDistance, duration).OnComplete(OnAnimationComplete);
+              visualPartATween = visualPartA.transform.DOLocalMoveX(dynamicDistance, duration);
+              visualPartBTween = visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration).OnComplete(OnAnimationComplete);
           }
       }
 
