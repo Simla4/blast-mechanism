@@ -21,8 +21,6 @@ public class Baloon : TileBase, IExplodable
         
         tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);
-        
-        // Sadece görsel/ses efektini burada yap.
     }
 }
 
