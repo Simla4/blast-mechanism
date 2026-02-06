@@ -8,7 +8,7 @@ public class MoveCommand : ICommand
     private GridManager gridManager;
     private Tween moveTween;
     
-    public float Duration => 0.1f;
+    public float Duration => 0.25f;
 
     public MoveCommand(TileBase tile, Vector2Int targetGridPos, GridManager gridManager)
     {

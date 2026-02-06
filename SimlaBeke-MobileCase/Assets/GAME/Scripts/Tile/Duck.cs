@@ -22,6 +22,12 @@ public class Duck : TileBase
     {
         if (TilePosition.y == 0)
         {
+            
+            var blockPool = PoolManager.Instance.GetPool(GetTileID());
+            blockPool.ReturnToPool(this);
+            
+            SoundManager.PlaySound("duck");
+            
             EventBus<OnDuckCollectEvent>.Emit(new OnDuckCollectEvent(this));
         }
     }

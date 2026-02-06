@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileIcon: {fileID: 0}
   tileId: SI-1
-  tileType: 0
+  tileType: 3
   tileColor: {r: 0, g: 0, b: 1, a: 0.84313726}
   tilePrefab: {fileID: 2592595870221416646, guid: d6b90f3275e3b473a920f4d962583b0b, type: 3}

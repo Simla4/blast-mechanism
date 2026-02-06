@@ -104,8 +104,10 @@ public class GridManager : MonoBehaviour
             {
                 var foundTile = foundTiles[i];
                 gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
-                PoolManager.Instance.GetPool(foundTile.GetTileID()).ReturnToPool(foundTile);
-                //TO-DO: Pool'a geri gönderme işini kendi içinde yapsın ki farklı bir animasyon oynarsa animasyon bittikten sonra pool'a geri dönsün
+                if (foundTile.TryGetComponent<IMatchable>(out IMatchable matchable))
+                {
+                    matchable.ExplodeTile();
+                }
             }
             
             foreach (var foundTile in foundTiles)
@@ -274,7 +276,7 @@ public class GridManager : MonoBehaviour
         });
     }
     
-    public void ClearRow(int rowY)
+    private void ClearRow(int rowY)
     {
         for (int x = 0; x < levelData.gridWidth; x++)
         {
@@ -282,7 +284,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void ClearColumn(int colX)
+    private void ClearColumn(int colX)
     {
         for (int y = 0; y < levelData.gridHeight; y++)
         {
@@ -294,18 +296,18 @@ public class GridManager : MonoBehaviour
     {
         TileBase tile = gridArray[x, y];
     
-        // Eğer hücre boşsa veya içinde ÖRDEK varsa dokunmuyoruz (Ördek patlamaz)
         if (tile == null || tile is Duck) return;
         if(tile is Rocket ) return;
 
-        // Eğer roketin çarptığı şey bir BALON ise IExplodable tetiklenir
-        if (tile is IExplodable explodable)
+        if (tile .TryGetComponent<IExplodable>(out IExplodable explodable))
         {
-            explodable.OnNeighborExploded(); // Balon kendini yok eder
+            explodable.OnNeighborExploded();
         }
-    
-        var pool = PoolManager.Instance.GetPool(tile.GetTileID());
-        pool.ReturnToPool(tile);
+
+        if (tile.TryGetComponent<IMatchable>(out IMatchable matchable))
+        {
+            matchable.ExplodeTile();
+        }
         
         gridArray[x, y] = null;
     }

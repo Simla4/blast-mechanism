@@ -17,7 +17,9 @@ public class Baloon : TileBase, IExplodable
         
         _isDestroyed = true;
         
-        tilePool = PoolManager.Instance.GetPool(tileData.tileId);
+        SoundManager.PlaySound("balloon");
+        
+        tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);
         
         // Sadece görsel/ses efektini burada yap.

@@ -6,10 +6,12 @@ public class Block : TileBase, IMatchable
 {
     public void ExplodeTile()
     {
-        Debug.Log("Block exploded");
-        //TO-DO: kendi pozisyonunu gödenerecek ve ben patladım Event'i tetiklenecek.(particle için)
-        //TO-DO: Particle burada patlatılacak. Particle da pool'a bağlanacak. Particle rengi Spawn içinden kontrol edilecek.
+        SoundManager.PlaySound("cube_explode");
         
         Debug.Log(tileData.tileId + " exploded");
+        
+        var tilePool = PoolManager.Instance.GetPool(GetTileID());
+        tilePool.ReturnToPool(this);
+        
     }
 }

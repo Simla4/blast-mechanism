@@ -129,8 +129,8 @@ MonoBehaviour:
   direction: 0
   visualPartA: {fileID: 4561066023449444021}
   visualPartB: {fileID: 5259841769128003058}
-  distance: 15
-  duration: 0.5
+  distance: 6
+  duration: 0.4
 --- !u!1 &4561066023449444021
 GameObject:
   m_ObjectHideFlags: 0

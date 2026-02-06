@@ -11,7 +11,6 @@ using sb.eventbus;
       [SerializeField] private GameObject visualPartB; // sağ/alt
 
       [Header("Settings")]
-      [SerializeField] private float distance = 15f;
       [SerializeField] private float duration = 1f;
       
       private Vector3 visualPartAStartPosition;
@@ -58,16 +57,21 @@ using sb.eventbus;
 
       private void AnimateRocket()
       {
+          Camera mainCam = Camera.main;
+          float screenHeight = 2f * mainCam.orthographicSize;
+          float screenWidth = screenHeight * mainCam.aspect;
+
+          float dynamicDistance = (direction == RocketDirections.Horizontal) ? screenWidth : screenHeight;
+
           if (direction == RocketDirections.Horizontal)
           {
-              // Yatayda sağa ve sola
-              visualPartB.transform.DOLocalMoveX(-distance, duration);
-              visualPartA.transform.DOLocalMoveX(distance, duration).OnComplete(OnAnimationComplete);
+              visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration);
+              visualPartA.transform.DOLocalMoveX(dynamicDistance, duration).OnComplete(OnAnimationComplete);
           }
           else
           {
-              visualPartB.transform.DOLocalMoveX(-distance, duration);
-              visualPartA.transform.DOLocalMoveX(distance, duration).OnComplete(OnAnimationComplete);
+              visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration);
+              visualPartA.transform.DOLocalMoveX(dynamicDistance, duration).OnComplete(OnAnimationComplete);
           }
       }
 
