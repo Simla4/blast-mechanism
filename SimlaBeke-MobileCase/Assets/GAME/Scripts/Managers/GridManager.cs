@@ -64,7 +64,7 @@ public class GridManager : MonoBehaviour
 
     private void ChangeBorderSize()
     {
-        borderSpriteRenderer.size = new Vector2(levelData.gridWidth + padding.x, levelData.gridHeight + padding.y);
+        borderSpriteRenderer.size = new Vector2(levelData.gridWidth + padding.x * 2, levelData.gridHeight + padding.y * 2);
     }
 
     private void CreateBord()
@@ -265,9 +265,9 @@ public class GridManager : MonoBehaviour
     private void HandleRocketActivated(OnRocketActivated e)
     {
         if (e.direction == RocketDirections.Horizontal)
-            ClearRow(e.position.y);
+            ClearRow(e.position);
         else
-            ClearColumn(e.position.x);
+            ClearColumn(e.position);
         
         gridArray[e.position.x, e.position.y] = null;
         
@@ -276,19 +276,21 @@ public class GridManager : MonoBehaviour
         });
     }
     
-    private void ClearRow(int rowY)
+    private void ClearRow(Vector2Int pos)
     {
         for (int x = 0; x < levelData.gridWidth; x++)
         {
-            ClearAt(x, rowY);
+            if(pos ==  new Vector2Int(x,pos.y)) continue;
+            ClearAt(x, pos.y);
         }
     }
 
-    private void ClearColumn(int colX)
+    private void ClearColumn(Vector2Int pos)
     {
         for (int y = 0; y < levelData.gridHeight; y++)
         {
-            ClearAt(colX, y);
+            if(pos ==  new Vector2Int(pos.x,y)) continue;
+            ClearAt(pos.x, y);
         }
     }
 
@@ -297,7 +299,11 @@ public class GridManager : MonoBehaviour
         TileBase tile = gridArray[x, y];
     
         if (tile == null || tile is Duck) return;
-        if(tile is Rocket ) return;
+
+        if (tile is Rocket rocket)
+        {
+            rocket.OnClickedTileEvent();
+        }
 
         if (tile .TryGetComponent<IExplodable>(out IExplodable explodable))
         {

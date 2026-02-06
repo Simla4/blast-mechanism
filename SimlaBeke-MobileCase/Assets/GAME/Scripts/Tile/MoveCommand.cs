@@ -27,7 +27,7 @@ public class MoveCommand : ICommand
         Vector3 targetWorldPos = gridManager.GetWorldPosition(targetGridPos);
         
         moveTween = tile.transform.DOMove(targetWorldPos, Duration)
-            .SetEase(Ease.Linear);
+            .SetEase(Ease.OutBounce);
 
         return moveTween;
     }
