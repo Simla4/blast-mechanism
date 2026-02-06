@@ -23,7 +23,7 @@ public class GridManager : MonoBehaviour
     
     private TileBase[,] gridArray;
     private FloodFillService floodFill;
-    private EventListener<OnBlockCollected> onBlockCollected;
+    private EventListener<OnDuckCollectEvent> onDuckCollected;
     private EventListener<OnClickedTileEvent> onClickedTile;
     private EventListener<OnRocketActivated> onRocketActivated;
 
@@ -33,8 +33,8 @@ public class GridManager : MonoBehaviour
     private void OnEnable()
     {
         
-        onBlockCollected = new EventListener<OnBlockCollected>(HandleTileCollection);
-        EventBus<OnBlockCollected>.AddListener(onBlockCollected);
+        onDuckCollected = new EventListener<OnDuckCollectEvent>(HandleTileCollection);
+        EventBus<OnDuckCollectEvent>.AddListener(onDuckCollected);
 
         onClickedTile = new EventListener<OnClickedTileEvent>(OnBlockClicked);
         EventBus<OnClickedTileEvent>.AddListener(onClickedTile);
@@ -45,7 +45,7 @@ public class GridManager : MonoBehaviour
     
     private void OnDisable()
     {
-        EventBus<OnBlockCollected>.RemoveListener(onBlockCollected);
+        EventBus<OnDuckCollectEvent>.RemoveListener(onDuckCollected);
         EventBus<OnClickedTileEvent>.RemoveListener(onClickedTile);
         EventBus<OnRocketActivated>.RemoveListener(onRocketActivated);
     }
@@ -240,7 +240,7 @@ public class GridManager : MonoBehaviour
         }
     }
     
-    private void HandleTileCollection(OnBlockCollected e)
+    private void HandleTileCollection(OnDuckCollectEvent e)
     {
         var tilePos = e.tile.TilePosition;
         

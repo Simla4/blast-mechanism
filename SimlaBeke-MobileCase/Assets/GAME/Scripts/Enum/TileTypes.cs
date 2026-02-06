@@ -2,11 +2,7 @@
 
 public enum TileTypes 
 {
-    BlueBlock,
-    RedBlock,
-    YelowBlock,
-    GreenBlock,
-    PurpleBlock,
+    Cube,
     Baloon,
     Duck,
     Rocket

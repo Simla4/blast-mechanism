@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PoolManager : MonoSingleton<PoolManager>
 {
-    // PoolBase olarak tutuyoruz çünkü ileride Pool<ParticleSystem> da ekleyebilirsin
+    
     private Dictionary<string, PoolBase> allPools = new Dictionary<string, PoolBase>();
 
     [SerializeField] private List<TileData> allTiles; 

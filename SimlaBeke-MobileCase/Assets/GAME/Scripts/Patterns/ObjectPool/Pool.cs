@@ -58,16 +58,21 @@ public class Pool<T> : PoolBase where T : Component
 
     public override void ReturnToPool(Component obj)
     {
-        active.Remove(obj as T);
-        inactive.Push(obj as T);
-        
-        if (obj.TryGetComponent(out IDespawned iDeSpawn))
-        {
-            iDeSpawn.OnDespawned();
-        }
+        T item = obj as T;
+        if (item == null) return;
 
-        
-        obj.gameObject.SetActive(false);
+        // 🔥 KRİTİK KONTROL
+        if (inactive.Contains(item))
+            return; // zaten pool'da, ikinci kez sokma
+
+        active.Remove(item);
+
+        if (item.TryGetComponent(out IDespawned despawned))
+            despawned.OnDespawned();
+
+        item.gameObject.SetActive(false);
+        inactive.Push(item);
     }
+
 
 }

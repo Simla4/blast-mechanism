@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using sb.eventbus;
@@ -12,8 +13,20 @@ using sb.eventbus;
       [Header("Settings")]
       [SerializeField] private float distance = 15f;
       [SerializeField] private float duration = 0.5f;
+      
+      private Vector3 visualPartAStartPosition;
+      private Vector3 visualPartBStartPosition;
+      private Pool<TileBase> tilePool;
 
       public RocketDirections Direction => direction;
+
+
+      private void Start()
+      {
+          visualPartAStartPosition = visualPartA.transform.localPosition;
+          visualPartBStartPosition = visualPartB.transform.localPosition;
+      }
+
 
       public void Init(RocketDirections dir)
       {
@@ -41,27 +54,26 @@ using sb.eventbus;
       {
           if (direction == RocketDirections.Horizontal)
           {
-              visualPartA.transform.DOMoveX(
-                  visualPartA.transform.position.x - distance, duration);
-              visualPartB.transform.DOMoveX(
-                  visualPartB.transform.position.x + distance, duration);
+              visualPartB.transform.DOMoveX(visualPartA.transform.position.x - distance, duration);
+              visualPartA.transform.DOMoveX(visualPartB.transform.position.x + distance, duration).OnComplete(OnAnimationComplete);
           }
           else
           {
-              visualPartA.transform.DOMoveY(
-                  visualPartA.transform.position.y + distance, duration);
-              visualPartB.transform.DOMoveY(
-                  visualPartB.transform.position.y - distance, duration);
+              visualPartB.transform.DOMoveY(visualPartA.transform.position.y + distance, duration);
+              visualPartA.transform.DOMoveY(visualPartB.transform.position.y - distance, duration).OnComplete(OnAnimationComplete);
           }
+      }
 
-          DOVirtual.DelayedCall(duration, () =>
-          {
-              PoolManager.Instance
-                  .GetPool(GetTileID())
-                  .ReturnToPool(this);
-          });
+      private void OnAnimationComplete()
+      {
+          visualPartA.transform.localPosition = visualPartAStartPosition;
+          visualPartB.transform.localPosition = visualPartBStartPosition;
+          
+          tilePool = PoolManager.Instance.GetPool(tileData.tileId);
+          tilePool.ReturnToPool(this);
       }
   }
+
 
 public enum RocketDirections 
 { 

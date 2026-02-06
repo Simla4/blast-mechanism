@@ -22,7 +22,8 @@ public class Duck : TileBase
     {
         if (TilePosition.y == 0)
         {
-            EventBus<OnBlockCollected>.Emit(new OnBlockCollected(this, tileData));
+            EventBus<OnBlockCollected>.Emit(new OnBlockCollected(tileData));
+            EventBus<OnDuckCollectEvent>.Emit(new OnDuckCollectEvent(this));
         }
     }
 }
