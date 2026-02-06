@@ -17,14 +17,10 @@ public class Baloon : TileBase, IExplodable
         
         _isDestroyed = true;
         
-        
-        
         tilePool = PoolManager.Instance.GetPool(tileData.tileId);
         tilePool.ReturnToPool(this);
         
         // Sadece görsel/ses efektini burada yap.
-        // Pool'a dönme ve Event işini GridManager halledecek.
-        // NOT: GridManager'da zaten Pool'a dönüyor, burada yaparsan hata alırsın.
     }
 }
 

@@ -22,6 +22,4 @@ public class GoalUIElement : MonoBehaviour
         countText.text = remaining <= 0 ? "✔" : remaining.ToString();
         transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
     }
-    
-    // TO-DO: UI'da bir punch animasyonu da oynayabilir. Oyun tekrar incelenecek
 }

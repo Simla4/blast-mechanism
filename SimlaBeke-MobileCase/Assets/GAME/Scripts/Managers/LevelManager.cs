@@ -31,8 +31,19 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        remainingGoals = levelData.levelGoals;
+        remainingGoals = new List<LevelGoals>();
+
+        foreach (var goal in levelData.levelGoals)
+        {
+            remainingGoals.Add(new LevelGoals 
+            { 
+                goalType = goal.goalType, 
+                count = goal.count 
+            });
+        }
+
         remainingMoveCount = levelData.moveCount;
+        EventBus<OnGameStartEvent>.Emit(new OnGameStartEvent(remainingMoveCount, remainingGoals));
     }
 
     private void CheckMoveCount(OnBlockCollected e)
@@ -47,8 +58,15 @@ public class LevelManager : MonoBehaviour
         {
             if (e.tileData.tileId == remainingGoals[i].goalType.tileId)
             {
-                var newGoal = remainingGoals[i].count--;
-                EventBus<ChangeGoalsUIEvent>.Emit(new ChangeGoalsUIEvent(newGoal, remainingGoals[i].goalType));
+                // 1. Önce hafızadaki değeri azalt
+                remainingGoals[i].count--; 
+            
+                // 2. Azalmış olan yeni değeri bir değişkene al
+                int updatedCount = remainingGoals[i].count;
+
+                // 3. UI'ya bu taze değeri gönder
+                EventBus<ChangeGoalsUIEvent>.Emit(new ChangeGoalsUIEvent(updatedCount, remainingGoals[i].goalType));
+            
                 break;
             }
         }

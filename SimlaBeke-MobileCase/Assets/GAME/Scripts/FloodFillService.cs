@@ -21,8 +21,6 @@ public class FloodFillService
 
     public List<TileBase> Find(Vector2Int targetGrid)
     {
-        Debug.Log("grid width: " + grid.GetLength(0) + " grid height: " + grid.GetLength(1) + " target grid: " + targetGrid);
-        
         if(!grid[targetGrid.x, targetGrid.y].TryGetComponent<IMatchable>(out IMatchable matchable)) return null;
         
         TileBase startTile = grid[targetGrid.x, targetGrid.y];

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using sb.eventbus;
 using TMPro;
 using UnityEngine;
 
@@ -12,36 +14,54 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GoalUIElement goalPrefab;
 
     private List<GoalUIElement> _spawnedGoals = new List<GoalUIElement>();
+    private EventListener<OnGameStartEvent> onGameStart;
+    private EventListener<ChangeGoalsUIEvent> onChangeGoals;
+    private EventListener<ChangeMoveCountUIEvent> onChangeMoveCount;
 
-    // 1. ADIM: Oyun başladığında hedefleri oluştur
-    public void SetupUI(int moves, List<LevelGoals> goals)
+    private void OnEnable()
     {
-        moveCountText.text = moves.ToString();
+        onGameStart = new EventListener<OnGameStartEvent>(SetupUI);
+        EventBus<OnGameStartEvent>.AddListener(onGameStart);
 
-        foreach (var goal in goals)
+        onChangeGoals = new EventListener<ChangeGoalsUIEvent>(OnGoalChanged);
+        EventBus<ChangeGoalsUIEvent>.AddListener(onChangeGoals);
+
+        onChangeMoveCount = new EventListener<ChangeMoveCountUIEvent>(OnMoveCountChanged);
+        EventBus<ChangeMoveCountUIEvent>.AddListener(onChangeMoveCount);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<OnGameStartEvent>.RemoveListener(onGameStart);
+        EventBus<ChangeGoalsUIEvent>.RemoveListener(onChangeGoals);
+        EventBus<ChangeMoveCountUIEvent>.RemoveListener(onChangeMoveCount);
+    }
+
+    public void SetupUI(OnGameStartEvent e)
+    {
+        moveCountText.text = e.moves.ToString();
+
+        foreach (var goal in e.levelGoals)
         {
             var newGoal = Instantiate(goalPrefab, goalsContainer);
             newGoal.Initialize(goal.goalType.tileId, goal.goalType.tileIcon, goal.count);
             _spawnedGoals.Add(newGoal);
+            
+            Debug.Log(goal.goalType.tileId);
         }
     }
 
-    // 2. ADIM: EventBus'tan gelen veriye göre güncelle
-    // LevelManager'dan "OnGoalUpdatedEvent" fırlatıldığında bunu çağır
-    public void OnGoalChanged(string id, int remaining)
+    public void OnGoalChanged(ChangeGoalsUIEvent e)
     {
-        var element = _spawnedGoals.Find(x => x.TargetTileId == id);
+        var element = _spawnedGoals.Find(x => x.TargetTileId == e.TileData.tileId);
         if (element != null)
         {
-            element.UpdateUI(remaining);
+            element.UpdateUI(e.newGoal);
         }
     }
 
-    public void OnMoveCountChanged(int remainingMoves)
+    public void OnMoveCountChanged(ChangeMoveCountUIEvent e)
     {
-        moveCountText.text = remainingMoves.ToString();
-        
-        // Kritik: Hamle sayısı azaldığında metni salla veya kırmızı yap
-        if(remainingMoves <= 5) moveCountText.color = Color.red;
+        moveCountText.text = e.newValue.ToString();
     }
 }

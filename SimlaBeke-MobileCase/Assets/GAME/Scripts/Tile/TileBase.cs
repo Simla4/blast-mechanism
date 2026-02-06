@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using sb.eventbus;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -37,14 +38,9 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 
     public void OnDespawned()
     {
+        EventBus<OnBlockCollected>.Emit(new OnBlockCollected(tileData));
         gameObject.SetActive(false);
     }
-
-    // private void PlaceTile(Vector2Int position)
-    // {
-    //     tilePosition = position;
-    //     transform.localPosition = new Vector3(tilePosition.x + offsetX, tilePosition.y + offsetY, transform.localPosition.z);
-    // }
 
     public void SetTilePosition(Vector2Int position)
     {
