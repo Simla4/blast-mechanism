@@ -12,7 +12,7 @@ using sb.eventbus;
 
       [Header("Settings")]
       [SerializeField] private float distance = 15f;
-      [SerializeField] private float duration = 0.5f;
+      [SerializeField] private float duration = 1f;
       
       private Vector3 visualPartAStartPosition;
       private Vector3 visualPartBStartPosition;
@@ -37,30 +37,37 @@ using sb.eventbus;
       public void OnClickedTileEvent()
       {
           // 1) Board temizliği – görselden bağımsız, hemen
-          EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction));
+          EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration));
 
-          // 2) Roket animasyonu
           AnimateRocket();
       }
 
       private void SetupVisuals()
       {
-          // Burada sprite’ları ve yönü ayarlıyorsun:
-          // - Horizontal: A sol sprite, B sağ sprite, localPosition’lar x ekseninde yakın
-          // - Vertical: parent veya çocukları 90° döndür, A yukarı, B aşağı baksın
+          if (direction == RocketDirections.Vertical)
+          {
+              // Roketi dikey yapmak için Z ekseninde 90 derece döndür
+              transform.localRotation = Quaternion.Euler(0, 0, 90);
+          }
+          else
+          {
+              // Yatay ise rotasyonu sıfırla (0,0,0)
+              transform.localRotation = Quaternion.identity;
+          }
       }
 
       private void AnimateRocket()
       {
           if (direction == RocketDirections.Horizontal)
           {
-              visualPartB.transform.DOMoveX(visualPartA.transform.position.x - distance, duration);
-              visualPartA.transform.DOMoveX(visualPartB.transform.position.x + distance, duration).OnComplete(OnAnimationComplete);
+              // Yatayda sağa ve sola
+              visualPartB.transform.DOLocalMoveX(-distance, duration);
+              visualPartA.transform.DOLocalMoveX(distance, duration).OnComplete(OnAnimationComplete);
           }
           else
           {
-              visualPartB.transform.DOMoveY(visualPartA.transform.position.y + distance, duration);
-              visualPartA.transform.DOMoveY(visualPartB.transform.position.y - distance, duration).OnComplete(OnAnimationComplete);
+              visualPartB.transform.DOLocalMoveX(-distance, duration);
+              visualPartA.transform.DOLocalMoveX(distance, duration).OnComplete(OnAnimationComplete);
           }
       }
 

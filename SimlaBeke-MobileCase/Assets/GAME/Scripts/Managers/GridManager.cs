@@ -144,6 +144,16 @@ public class GridManager : MonoBehaviour
         newPowerUp.transform.SetParent(tilesParent);
         newPowerUp.transform.position = GetWorldPosition(pos);
         gridArray[pos.x, pos.y] = newPowerUp;
+        
+        if (newPowerUp is Rocket rocket)
+        {
+            // %50 ihtimalle dikey veya yatay seç
+            RocketDirections randomDir = (Random.value > 0.5f) 
+                ? RocketDirections.Horizontal 
+                : RocketDirections.Vertical;
+            
+            rocket.Init(randomDir);
+        }
     }
     
     public void NotifyNeighbors(Vector2Int explodedPos)
@@ -191,7 +201,6 @@ public class GridManager : MonoBehaviour
                         gridArray[x, y] = null;
                         movingTile.SetTilePosition(new Vector2Int(x, nextEmptyY));
 
-                        // Komut artık tertemiz: "Hangi taş, hangi grid koordinatına?"
                         var cmd = new MoveCommand(movingTile, movingTile.TilePosition, this);
                         dropSequence.Join(cmd.Execute());
                     }
@@ -257,6 +266,12 @@ public class GridManager : MonoBehaviour
             ClearRow(e.position.y);
         else
             ClearColumn(e.position.x);
+        
+        gridArray[e.position.x, e.position.y] = null;
+        
+        DOVirtual.DelayedCall(0.5f, () => {
+            DropTiles();
+        });
     }
     
     public void ClearRow(int rowY)
@@ -265,7 +280,6 @@ public class GridManager : MonoBehaviour
         {
             ClearAt(x, rowY);
         }
-        DropTiles();
     }
 
     public void ClearColumn(int colX)
@@ -274,7 +288,6 @@ public class GridManager : MonoBehaviour
         {
             ClearAt(colX, y);
         }
-        DropTiles();
     }
 
     private void ClearAt(int x, int y)
@@ -283,6 +296,7 @@ public class GridManager : MonoBehaviour
     
         // Eğer hücre boşsa veya içinde ÖRDEK varsa dokunmuyoruz (Ördek patlamaz)
         if (tile == null || tile is Duck) return;
+        if(tile is Rocket ) return;
 
         // Eğer roketin çarptığı şey bir BALON ise IExplodable tetiklenir
         if (tile is IExplodable explodable)
@@ -290,8 +304,10 @@ public class GridManager : MonoBehaviour
             explodable.OnNeighborExploded(); // Balon kendini yok eder
         }
     
+        var pool = PoolManager.Instance.GetPool(tile.GetTileID());
+        pool.ReturnToPool(tile);
+        
         gridArray[x, y] = null;
-        PoolManager.Instance.GetPool(tile.GetTileID()).ReturnToPool(tile);
     }
     
     private bool IsInsideGrid(Vector2Int pos)
