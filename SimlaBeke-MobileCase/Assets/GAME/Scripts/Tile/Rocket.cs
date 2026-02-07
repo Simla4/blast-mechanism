@@ -7,8 +7,10 @@ using sb.eventbus;
   {
       [Header("References")]
       [SerializeField] private RocketDirections direction;
-      [SerializeField] private GameObject visualPartA; // sol/üst
-      [SerializeField] private GameObject visualPartB; // sağ/alt
+      [SerializeField] private GameObject visualPartA;
+      [SerializeField] private GameObject visualPartB;
+      [SerializeField] private GameObject rocketParticleA;
+      [SerializeField] private GameObject rocketParticleB;
 
       [Header("Settings")]
       [SerializeField] private float duration = 1f;
@@ -56,6 +58,9 @@ using sb.eventbus;
 
       private void AnimateRocket()
       {
+          rocketParticleA.SetActive(true);
+          rocketParticleB.SetActive(true);
+          
           Camera mainCam = Camera.main;
           float screenHeight = 2f * mainCam.orthographicSize;
           float screenWidth = screenHeight * mainCam.aspect;
@@ -88,6 +93,9 @@ using sb.eventbus;
       {
           visualPartA.transform.localPosition = visualPartAStartPosition;
           visualPartB.transform.localPosition = visualPartBStartPosition;
+          
+          rocketParticleA.SetActive(false);
+          rocketParticleB.SetActive(false);
           
           tilePool = PoolManager.Instance.GetPool(tileData.tileId);
           tilePool.ReturnToPool(this);
