@@ -305,6 +305,7 @@ public class GridManager : MonoBehaviour
             if (rocket.Direction == direction)
             {
                 PoolManager.Instance.GetPool(tile.GetTileID()).ReturnToPool(tile);
+                gridArray[x, y] = null;
                 return;
             }
             rocket.OnClickedTileEvent();
