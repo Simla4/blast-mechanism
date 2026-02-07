@@ -34,6 +34,8 @@ public class GoalUIElement : MonoBehaviour
             return;
         }
         
+        countText.text = remaining.ToString();
+        
         punchTween = transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
     }
 }
