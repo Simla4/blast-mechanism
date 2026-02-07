@@ -40,6 +40,7 @@ using sb.eventbus;
       public void OnClickedTileEvent()
       {
           EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration));
+          EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
 
           AnimateRocket();
       }

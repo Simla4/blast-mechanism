@@ -9,15 +9,15 @@ public class LevelManager : MonoBehaviour
     [Header("Refferances")]
     [SerializeField] private LevelData levelData;
     
-    private EventListener<OnBlockCollected> onBlockCollectedMoveCount;
+    private EventListener<OnMoveCountChnagedEvent> onBlockCollectedMoveCount;
     private EventListener<OnBlockCollected> onBlockCollectedGoals;
     private List<LevelGoals> remainingGoals = new List<LevelGoals>();
     private int remainingMoveCount;
 
     private void OnEnable()
     {
-        onBlockCollectedMoveCount = new EventListener<OnBlockCollected>(CheckMoveCount);
-        EventBus<OnBlockCollected>.AddListener(onBlockCollectedMoveCount);
+        onBlockCollectedMoveCount = new EventListener<OnMoveCountChnagedEvent>(CheckMoveCount);
+        EventBus<OnMoveCountChnagedEvent>.AddListener(onBlockCollectedMoveCount);
         
         onBlockCollectedGoals = new EventListener<OnBlockCollected>(CheckGoals);
         EventBus<OnBlockCollected>.AddListener(onBlockCollectedGoals);
@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventBus<OnBlockCollected>.RemoveListener(onBlockCollectedMoveCount);
+        EventBus<OnMoveCountChnagedEvent>.RemoveListener(onBlockCollectedMoveCount);
         EventBus<OnBlockCollected>.RemoveListener(onBlockCollectedGoals);
     }
 
@@ -46,7 +46,7 @@ public class LevelManager : MonoBehaviour
         EventBus<OnGameStartEvent>.Emit(new OnGameStartEvent(remainingMoveCount, remainingGoals));
     }
 
-    private void CheckMoveCount(OnBlockCollected e)
+    private void CheckMoveCount(OnMoveCountChnagedEvent e)
     {
         remainingMoveCount--;
         EventBus<ChangeMoveCountUIEvent>.Emit(new ChangeMoveCountUIEvent( remainingMoveCount));

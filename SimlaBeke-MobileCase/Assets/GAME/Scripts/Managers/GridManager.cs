@@ -28,6 +28,7 @@ public class GridManager : MonoBehaviour
     private EventListener<OnRocketActivated> onRocketActivated;
 
     private OnAnyBlockFallEvent onAnyBlockFall = new OnAnyBlockFallEvent();
+    private OnMoveCountChnagedEvent onMoveCountChnaged = new OnMoveCountChnagedEvent();
 
 
     private void OnEnable()
@@ -100,6 +101,7 @@ public class GridManager : MonoBehaviour
     {
         if (foundTiles.Count >= 2)
         {
+            EventBus<OnMoveCountChnagedEvent>.Emit(onMoveCountChnaged);
             for (int i = 0; i < foundTiles.Count; i++)
             {
                 var foundTile = foundTiles[i];
@@ -123,15 +125,12 @@ public class GridManager : MonoBehaviour
 
     private void CheckAndSpawnPowerUp(int count, Vector2Int pos)
     {
-        // Eşikleri büyükten küçüğe kontrol et ki 7 patladıysa 5'liği değil 7'liği versin
-        // (Bunun için listeyi Inspector'da büyükten küçüğe dizebiliriz veya koda .OrderByDescending ekleyebiliriz)
-    
         foreach (var threshold in gameSettings.powerUpThresholds)
         {
             if (count >= threshold.requiredCount)
             {
                 SpawnPowerUp(threshold.powerUpData, pos);
-                break; // En yüksek eşiği bulduk, çıkıyoruz
+                break;
             }
         }
     }
