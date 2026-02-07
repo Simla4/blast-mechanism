@@ -39,7 +39,9 @@ using sb.eventbus;
 
       public void OnClickedTileEvent()
       {
-          EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration));
+          float timePerUnit = duration / GetDistance();
+          
+          EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration, timePerUnit));
           EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
 
           AnimateRocket();
@@ -61,12 +63,6 @@ using sb.eventbus;
       {
           rocketParticleA.SetActive(true);
           rocketParticleB.SetActive(true);
-          
-          Camera mainCam = Camera.main;
-          float screenHeight = 2f * mainCam.orthographicSize;
-          float screenWidth = screenHeight * mainCam.aspect;
-
-          float dynamicDistance = (direction == RocketDirections.Horizontal) ? screenWidth : screenHeight;
 
           if (visualPartATween != null)
           {
@@ -80,16 +76,28 @@ using sb.eventbus;
           
           if (direction == RocketDirections.Horizontal)
           {
-              visualPartATween = visualPartA.transform.DOLocalMoveX(dynamicDistance, duration);
-              visualPartBTween = visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration).OnComplete(OnAnimationComplete);
+              visualPartATween = visualPartA.transform.DOLocalMoveX(GetDistance(), duration);
+              visualPartBTween = visualPartB.transform.DOLocalMoveX(-GetDistance(), duration).OnComplete(OnAnimationComplete);
           }
           else
           {
-              visualPartATween = visualPartA.transform.DOLocalMoveX(dynamicDistance, duration);
-              visualPartBTween = visualPartB.transform.DOLocalMoveX(-dynamicDistance, duration).OnComplete(OnAnimationComplete);
+              visualPartATween = visualPartA.transform.DOLocalMoveX(GetDistance(), duration);
+              visualPartBTween = visualPartB.transform.DOLocalMoveX(-GetDistance(), duration).OnComplete(OnAnimationComplete);
           }
       }
 
+      private float GetDistance()
+      {
+          
+          Camera mainCam = Camera.main;
+          float screenHeight = 2f * mainCam.orthographicSize;
+          float screenWidth = screenHeight * mainCam.aspect;
+
+          float dynamicDistance = (direction == RocketDirections.Horizontal) ? screenWidth : screenHeight;
+          
+          return dynamicDistance;
+      }
+      
       private void OnAnimationComplete()
       {
           visualPartA.transform.localPosition = visualPartAStartPosition;

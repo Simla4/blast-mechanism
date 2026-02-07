@@ -7,11 +7,13 @@ public class OnRocketActivated : IEvent
         public Vector2Int position;
         public RocketDirections direction;
         public float animationDuration;
+        public float timePerUnit;
 
-        public OnRocketActivated(Vector2Int position, RocketDirections direction, float animationDuration)
+        public OnRocketActivated(Vector2Int position, RocketDirections direction, float animationDuration, float timePerUnit)
         {
             this.position = position;
             this.direction = direction;
             this.animationDuration = animationDuration;
+            this.timePerUnit = timePerUnit;
         }
     }

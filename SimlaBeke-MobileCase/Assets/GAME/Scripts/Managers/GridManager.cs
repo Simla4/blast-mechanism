@@ -264,9 +264,9 @@ public class GridManager : MonoBehaviour
     private void HandleRocketActivated(OnRocketActivated e)
     {
         if (e.direction == RocketDirections.Horizontal)
-            ClearRow(e.position);
+            ClearRow(e.position, e.timePerUnit);
         else
-            ClearColumn(e.position);
+            ClearColumn(e.position, e.timePerUnit);
         
         gridArray[e.position.x, e.position.y] = null;
         
@@ -275,25 +275,45 @@ public class GridManager : MonoBehaviour
         });
     }
     
-    private void ClearRow(Vector2Int pos)
+    private void ClearRow(Vector2Int rocketPos, float timePerUnit)
     {
         for (int x = 0; x < levelData.gridWidth; x++)
         {
-            if(pos ==  new Vector2Int(x,pos.y)) continue;
-            ClearAt(x, pos.y, RocketDirections.Horizontal);
+            if(rocketPos.x == x) continue;
+
+            // KRİTİK NOKTA: Roket merkezine olan uzaklığı buluyoruz (0, 1, 2, 3...)
+            float distance = Mathf.Abs(x - rocketPos.x);
+        
+            // Gecikmeyi mesafeye bağlıyoruz. 
+            // 0.05f çarpanı roketin hızıyla (duration) el ile senkron edilmeli.
+            float delay = distance * 0.08f; 
+
+            StartCoroutine(DelayedClearAt(x, rocketPos.y, RocketDirections.Horizontal, delay));
         }
     }
 
-    private void ClearColumn(Vector2Int pos)
+    private void ClearColumn(Vector2Int rocketPos, float timePerUnit)
     {
         for (int y = 0; y < levelData.gridHeight; y++)
         {
-            if(pos ==  new Vector2Int(pos.x,y)) continue;
-            ClearAt(pos.x, y, RocketDirections.Vertical);
+            if(rocketPos.y == y) continue;
+
+            // Yukarı ve aşağı giden uçlar aynı anda merkezden uzaklaştığı için 
+            // mesafe (Abs) her iki yöndeki bloğa aynı delay'i verir.
+            float distance = Mathf.Abs(y - rocketPos.y);
+            float delay = distance * 0.08f;
+
+            StartCoroutine(DelayedClearAt(rocketPos.x, y, RocketDirections.Vertical, delay));
         }
     }
+    
+    private IEnumerator DelayedClearAt(int x, int y, RocketDirections direction, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ExecuteClear(x, y, direction);
+    }
 
-    private void ClearAt(int x, int y, RocketDirections direction)
+    private void ExecuteClear(int x, int y, RocketDirections direction)
     {
         TileBase tile = gridArray[x, y];
     
