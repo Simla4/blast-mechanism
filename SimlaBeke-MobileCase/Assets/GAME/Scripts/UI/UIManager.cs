@@ -46,8 +46,6 @@ public class UIManager : MonoBehaviour
             var newGoal = Instantiate(goalPrefab, goalsContainer);
             newGoal.Initialize(goal.goalType.tileId, goal.goalType.tileIcon, goal.count);
             _spawnedGoals.Add(newGoal);
-            
-            Debug.Log(goal.goalType.tileId);
         }
     }
 

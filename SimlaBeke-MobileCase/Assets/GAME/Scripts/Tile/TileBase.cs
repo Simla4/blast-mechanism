@@ -7,6 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 {
+    [Header("Refferances")]
+    [SerializeField] protected ParticleSystem destroyParticles;
+    
     protected TileData tileData;
     
     private SpriteRenderer spriteRenderer;
