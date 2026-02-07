@@ -2,8 +2,9 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 using sb.eventbus;
+using Random = UnityEngine.Random;
 
-  public class Rocket : TileBase, IClickable
+public class Rocket : TileBase, IClickable
   {
       [Header("References")]
       [SerializeField] private RocketDirections direction;
@@ -31,9 +32,15 @@ using sb.eventbus;
       }
 
 
-      public void Init(RocketDirections dir)
+      protected override void Inıt()
       {
-          direction = dir;
+          base.Inıt();
+          
+          RocketDirections randomDir = (Random.value > 0.5f) 
+              ? RocketDirections.Horizontal 
+              : RocketDirections.Vertical;
+          
+          direction = randomDir;
           SetupVisuals();
       }
 

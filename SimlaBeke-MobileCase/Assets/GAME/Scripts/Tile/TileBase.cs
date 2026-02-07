@@ -37,6 +37,8 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
         tileData = data;
     
         spriteRenderer.sortingOrder = position.y;
+        
+        Inıt();
     }
 
     public void OnDespawned()
@@ -55,4 +57,6 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
     {
         return currentTileDataId;
     }
+    
+    protected virtual void Inıt(){}
 }

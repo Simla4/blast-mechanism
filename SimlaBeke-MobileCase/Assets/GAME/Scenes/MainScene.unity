@@ -241,6 +241,7 @@ MonoBehaviour:
   padding: {x: 0.11, y: 0.21}
   cellSize: 1
   spawnYOffset: 1.5
+  dropDelay: 0.15
 --- !u!1 &350435978
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,7 +371,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData: {fileID: 11400000, guid: 3a489a8855dd44b9aab34bd5b730503c, type: 2}
-  blockAnimation: {fileID: 4502204290984166330, guid: e769170dc47764c4189fc0058aa62890, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
