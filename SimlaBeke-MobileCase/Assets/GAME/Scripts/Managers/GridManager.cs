@@ -271,7 +271,7 @@ public class GridManager : MonoBehaviour
         
         gridArray[e.position.x, e.position.y] = null;
         
-        DOVirtual.DelayedCall(0.5f, () => {
+        DOVirtual.DelayedCall(e.animationDuration, () => {
             DropTiles();
         });
     }
@@ -302,7 +302,11 @@ public class GridManager : MonoBehaviour
 
         if (tile is Rocket rocket)
         {
-            if(rocket.Direction == direction) return;
+            if (rocket.Direction == direction)
+            {
+                PoolManager.Instance.GetPool(tile.GetTileID()).ReturnToPool(tile);
+                return;
+            }
             rocket.OnClickedTileEvent();
         }
 

@@ -24,6 +24,7 @@ public class Baloon : TileBase, IExplodable
         if (particle.TryGetComponent<BlockParticle>(out BlockParticle blockParticle))
         {
             blockParticle.Init(tileData.tileColor);
+            particle.SetActive(true);
         }
         
         tilePool = PoolManager.Instance.GetPool(GetTileID());

@@ -8,7 +8,7 @@ using UnityEngine;
 public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 {
     [Header("Refferances")]
-    [SerializeField] protected ParticleSystem blastParticle;
+    [SerializeField] protected GameObject blastParticle;
     
     protected TileData tileData;
     
