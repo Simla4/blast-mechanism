@@ -281,7 +281,7 @@ public class GridManager : MonoBehaviour
         for (int x = 0; x < levelData.gridWidth; x++)
         {
             if(pos ==  new Vector2Int(x,pos.y)) continue;
-            ClearAt(x, pos.y);
+            ClearAt(x, pos.y, RocketDirections.Horizontal);
         }
     }
 
@@ -290,11 +290,11 @@ public class GridManager : MonoBehaviour
         for (int y = 0; y < levelData.gridHeight; y++)
         {
             if(pos ==  new Vector2Int(pos.x,y)) continue;
-            ClearAt(pos.x, y);
+            ClearAt(pos.x, y, RocketDirections.Vertical);
         }
     }
 
-    private void ClearAt(int x, int y)
+    private void ClearAt(int x, int y, RocketDirections direction)
     {
         TileBase tile = gridArray[x, y];
     
@@ -302,6 +302,7 @@ public class GridManager : MonoBehaviour
 
         if (tile is Rocket rocket)
         {
+            if(rocket.Direction == direction) return;
             rocket.OnClickedTileEvent();
         }
 

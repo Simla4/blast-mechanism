@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Lean.Pool;
 using sb.eventbus;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,6 +19,12 @@ public class Baloon : TileBase, IExplodable
         _isDestroyed = true;
         
         SoundManager.PlaySound("balloon");
+        
+        var particle = LeanPool.Spawn(blastParticle, transform.position, Quaternion.identity);
+        if (particle.TryGetComponent<BlockParticle>(out BlockParticle blockParticle))
+        {
+            blockParticle.Init(tileData.tileColor);
+        }
         
         tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);

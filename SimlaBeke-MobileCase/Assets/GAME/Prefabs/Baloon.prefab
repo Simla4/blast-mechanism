@@ -124,5 +124,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dc2c474cad474cc1a180b272b715dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetX: 0.61
-  offsetY: 0.7
+  blastParticle: {fileID: 516234171909741120, guid: b4cdd6a14b1174450aa9aa3b748dfc55, type: 3}
