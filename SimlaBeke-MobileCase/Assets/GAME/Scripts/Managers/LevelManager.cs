@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using sb.eventbus;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoSingleton<LevelManager>
 {
     [Header("Refferances")]
     [SerializeField] private LevelData levelData;
@@ -70,5 +70,11 @@ public class LevelManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public List<LevelGoals> GetGoals()
+    {
+        return levelData.levelGoals;
+        
     }
 }

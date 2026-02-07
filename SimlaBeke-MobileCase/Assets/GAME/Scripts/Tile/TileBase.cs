@@ -57,6 +57,11 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
     {
         return currentTileDataId;
     }
+
+    public TileData GetTileData()
+    {
+        return tileData;
+    }
     
     protected virtual void Inıt(){}
 }

@@ -8,6 +8,7 @@ public class GoalUIElement : MonoBehaviour
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI countText;
     [SerializeField] private Image tickImage;
+    [SerializeField] private RectTransform rectTransform;
     
     private Tween punchTween;
     
@@ -37,5 +38,10 @@ public class GoalUIElement : MonoBehaviour
         countText.text = remaining.ToString();
         
         punchTween = transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
+    }
+
+    public RectTransform GetRectTransform()
+    {
+        return rectTransform;
     }
 }

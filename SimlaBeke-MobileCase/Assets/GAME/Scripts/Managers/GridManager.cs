@@ -19,6 +19,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Vector2 padding = new Vector2(0.11f, 0.21f);
     [SerializeField] private float cellSize = 1.0f; 
     [SerializeField] private float spawnYOffset = 1.5f;
+    [SerializeField] private float dropDelay = 0.25f;
     
     
     private TileBase[,] gridArray;
@@ -137,24 +138,12 @@ public class GridManager : MonoBehaviour
 
     private void SpawnPowerUp(TileData powerupData, Vector2Int pos)
     {
-        // Eğer id "Rocket" ise rastgele yön seç, değilse direkt id ile spawn et
-        
         var pool = PoolManager.Instance.GetPool(powerupData.tileId);
         var newPowerUp = pool.Spawn(pos, powerupData);
     
         newPowerUp.transform.SetParent(tilesParent);
         newPowerUp.transform.position = GetWorldPosition(pos);
         gridArray[pos.x, pos.y] = newPowerUp;
-        
-        if (newPowerUp is Rocket rocket)
-        {
-            // %50 ihtimalle dikey veya yatay seç
-            RocketDirections randomDir = (Random.value > 0.5f) 
-                ? RocketDirections.Horizontal 
-                : RocketDirections.Vertical;
-            
-            rocket.Init(randomDir);
-        }
     }
     
     public void NotifyNeighbors(Vector2Int explodedPos)
@@ -255,8 +244,6 @@ public class GridManager : MonoBehaviour
         var tilePos = e.tile.TilePosition;
         
         gridArray[tilePos.x, tilePos.y] = null;
-        var blockPool = PoolManager.Instance.GetPool(e.tile.GetTileID());
-        blockPool.ReturnToPool(e.tile);
         
         DropTiles();
     }
@@ -281,11 +268,8 @@ public class GridManager : MonoBehaviour
         {
             if(rocketPos.x == x) continue;
 
-            // KRİTİK NOKTA: Roket merkezine olan uzaklığı buluyoruz (0, 1, 2, 3...)
             float distance = Mathf.Abs(x - rocketPos.x);
         
-            // Gecikmeyi mesafeye bağlıyoruz. 
-            // 0.05f çarpanı roketin hızıyla (duration) el ile senkron edilmeli.
             float delay = distance * 0.08f; 
 
             StartCoroutine(DelayedClearAt(x, rocketPos.y, RocketDirections.Horizontal, delay));
@@ -298,8 +282,6 @@ public class GridManager : MonoBehaviour
         {
             if(rocketPos.y == y) continue;
 
-            // Yukarı ve aşağı giden uçlar aynı anda merkezden uzaklaştığı için 
-            // mesafe (Abs) her iki yöndeki bloğa aynı delay'i verir.
             float distance = Mathf.Abs(y - rocketPos.y);
             float delay = distance * 0.08f;
 

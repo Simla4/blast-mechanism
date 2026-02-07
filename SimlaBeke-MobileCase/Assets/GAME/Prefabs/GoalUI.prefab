@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 1334534328470466996}
   - component: {fileID: 8446046017929210358}
   m_Layer: 5
-  m_Name: GoalIcon
+  m_Name: GoalUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,6 +173,7 @@ MonoBehaviour:
   iconImage: {fileID: 4817814528603241901}
   countText: {fileID: 4817814528876469639}
   tickImage: {fileID: 1018567941}
+  rectTransform: {fileID: 4817814528603241900}
 --- !u!114 &7562239264209880054
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using sb.eventbus;
 using TMPro;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoSingleton<UIManager>
 {
     [Header("Move Settings")]
     [SerializeField] private TextMeshProUGUI moveCountText;
@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform goalsContainer;
     [SerializeField] private GoalUIElement goalPrefab;
 
-    private List<GoalUIElement> _spawnedGoals = new List<GoalUIElement>();
+    private List<GoalUIElement> spawnedGoals = new List<GoalUIElement>();
     private EventListener<OnGameStartEvent> onGameStart;
     private EventListener<ChangeGoalsUIEvent> onChangeGoals;
     private EventListener<ChangeMoveCountUIEvent> onChangeMoveCount;
@@ -45,13 +45,13 @@ public class UIManager : MonoBehaviour
         {
             var newGoal = Instantiate(goalPrefab, goalsContainer);
             newGoal.Initialize(goal.goalType.tileId, goal.goalType.tileIcon, goal.count);
-            _spawnedGoals.Add(newGoal);
+            spawnedGoals.Add(newGoal);
         }
     }
 
     public void OnGoalChanged(ChangeGoalsUIEvent e)
     {
-        var element = _spawnedGoals.Find(x => x.TargetTileId == e.TileData.tileId);
+        var element = spawnedGoals.Find(x => x.TargetTileId == e.TileData.tileId);
         if (element != null)
         {
             element.UpdateUI(e.newGoal);
@@ -61,5 +61,18 @@ public class UIManager : MonoBehaviour
     public void OnMoveCountChanged(ChangeMoveCountUIEvent e)
     {
         moveCountText.text = e.newValue.ToString();
+    }
+
+    public GoalUIElement GetGoalUIElement(string id)
+    {
+        foreach (var goal in spawnedGoals)
+        {
+            if (goal.TargetTileId == id)
+            {
+                return goal;
+            }
+        }
+        
+        return null;
     }
 }

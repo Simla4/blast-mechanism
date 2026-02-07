@@ -241,7 +241,7 @@ MonoBehaviour:
   padding: {x: 0.11, y: 0.21}
   cellSize: 1
   spawnYOffset: 1.5
-  dropDelay: 0.15
+  dropDelay: 0
 --- !u!1 &350435978
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,10 +275,10 @@ RectTransform:
   m_Father: {fileID: 1228001986}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 566.2898, y: -129.09988}
-  m_SizeDelta: {x: 361.4, y: 172.8}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 59.8, y: -124.9}
+  m_SizeDelta: {x: 361.40002, y: 172.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &350435980
 MonoBehaviour:
@@ -744,6 +744,7 @@ Transform:
   - {fileID: 1888371282}
   - {fileID: 356803691}
   - {fileID: 1756887629275846514}
+  - {fileID: 1760594602}
   m_Father: {fileID: 1640198450}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1089,6 +1090,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672917448}
   m_CullTransparentMesh: 1
+--- !u!1 &1760594601
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1760594602}
+  - component: {fileID: 1760594603}
+  m_Layer: 0
+  m_Name: FloatingBlockManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1760594602
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760594601}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1299072351}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1760594603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760594601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563d9ad88b3c94e5ca15a942efd63bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floatingBlockPrefab: {fileID: 7805341898188052426, guid: b0f48f90a2f67482e988f16ebb4dbee5, type: 3}
+  canvas: {fileID: 759193153}
 --- !u!1 &1879592656
 GameObject:
   m_ObjectHideFlags: 0
