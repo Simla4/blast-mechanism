@@ -40,8 +40,6 @@ public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
         {
             if(!IsGoal(explodableTiles[i])) continue;
             
-            Debug.Log(explodableTiles.Count);
-
             var uiElement = UIManager.Instance.GetGoalUIElement(explodableTiles[i].GetTileID());
             var spawnPosition = WorldToUISpace(explodableTiles[i].transform.position);
 
