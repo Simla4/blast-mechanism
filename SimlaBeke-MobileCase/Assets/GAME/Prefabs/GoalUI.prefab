@@ -175,6 +175,7 @@ MonoBehaviour:
   countText: {fileID: 4817814528876469639}
   tickImage: {fileID: 1018567941}
   rectTransform: {fileID: 4817814528603241900}
+  particleSystem: {fileID: 6442035757621131935}
 --- !u!114 &7562239264209880054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,5 +419,10 @@ PrefabInstance:
 --- !u!4 &6442035757605956127 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 419440, guid: 13b82480e3c784e45b0f8583da574260, type: 3}
+  m_PrefabInstance: {fileID: 6442035757605571695}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6442035757621131935 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19855088, guid: 13b82480e3c784e45b0f8583da574260, type: 3}
   m_PrefabInstance: {fileID: 6442035757605571695}
   m_PrefabAsset: {fileID: 0}

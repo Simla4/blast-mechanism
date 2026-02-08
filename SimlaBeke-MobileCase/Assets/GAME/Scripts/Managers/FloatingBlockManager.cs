@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using DG.Tweening;
@@ -13,6 +14,7 @@ public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
     [SerializeField] private Canvas canvas;
 
     private EventListener<OnMoveCountChnagedEvent> onClickedTileEvent;
+    private List<TileBase> explodableTiles = new List<TileBase>();
     private Tween moveTween;
 
     private void OnEnable()
@@ -33,8 +35,8 @@ public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
 
     private IEnumerator TryToSpawnFloatingBlockNumerator()
     {
+        explodableTiles = GridManager.Instance.GetExplodableTiles();
         
-        var explodableTiles = GridManager.Instance.GetExplodableTiles();
 
         for (int i = 0; i < explodableTiles.Count; i++)
         {

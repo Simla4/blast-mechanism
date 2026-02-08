@@ -8,6 +8,7 @@ public class BlockAnimation : MonoBehaviour
     [SerializeField] private float duration;
     [SerializeField] private Image iconImage;
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private GameObject targetParticle;
 
 
     public void Initialize(TileData tileData, GoalUIElement goalElement)
@@ -18,7 +19,9 @@ public class BlockAnimation : MonoBehaviour
     
     private void MoveTowardsGoal(GoalUIElement goalElement)
     {
-        transform.DOMove(goalElement.transform.position, duration).SetEase(Ease.InOutSine).OnComplete(() =>
+        var targetPosition = goalElement.transform.position;
+        
+        transform.DOMove(targetPosition, duration).SetEase(Ease.InOutSine).OnComplete(() =>
         {
             SoundManager.PlaySound("cube_collect");
             LeanPool.Despawn(gameObject);
@@ -26,4 +29,5 @@ public class BlockAnimation : MonoBehaviour
         
         rectTransform.DOSizeDelta(goalElement.GetRectTransform().sizeDelta, duration).SetEase(Ease.InOutSine);
     }
+    
 }

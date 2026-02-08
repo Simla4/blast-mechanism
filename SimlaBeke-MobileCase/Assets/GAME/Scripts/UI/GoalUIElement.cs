@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -9,15 +10,23 @@ public class GoalUIElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countText;
     [SerializeField] private Image tickImage;
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private ParticleSystem particleSystem;
     
     private Tween punchTween;
+    private TileData tileData;
     
     public string TargetTileId { get; private set; }
 
-    public void Initialize(string id, Sprite icon, int startCount)
+    private void Start()
     {
-        TargetTileId = id;
-        iconImage.sprite = icon;
+        particleSystem.Stop();
+    }
+
+    public void Initialize(TileData tileData, int startCount)
+    {
+        TargetTileId = tileData.tileId;
+        iconImage.sprite = tileData.tileIcon;
+        this.tileData = tileData;
         UpdateUI(startCount);
     }
 
@@ -38,6 +47,8 @@ public class GoalUIElement : MonoBehaviour
         countText.text = remaining.ToString();
         
         punchTween = transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
+
+        particleSystem.Play();
     }
 
     public RectTransform GetRectTransform()

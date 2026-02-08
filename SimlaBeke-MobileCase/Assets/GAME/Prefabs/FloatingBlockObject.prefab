@@ -92,3 +92,4 @@ MonoBehaviour:
   duration: 0.5
   iconImage: {fileID: 3934792554860014787}
   rectTransform: {fileID: 3657575849406211685}
+  targetParticle: {fileID: 164832, guid: 13b82480e3c784e45b0f8583da574260, type: 3}

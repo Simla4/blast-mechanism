@@ -3,11 +3,11 @@ using sb.eventbus;
 public class ChangeGoalsUIEvent : IEvent
 {
     public int newGoal;
-    public TileData TileData;
+    public TileData tileData;
 
     public ChangeGoalsUIEvent(int newGoal, TileData tileData)
     {
         this.newGoal = newGoal;
-        this.TileData = tileData;
+        this.tileData = tileData;
     }
 }
