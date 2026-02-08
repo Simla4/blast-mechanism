@@ -175,7 +175,7 @@ MonoBehaviour:
   countText: {fileID: 4817814528876469639}
   tickImage: {fileID: 1018567941}
   rectTransform: {fileID: 4817814528603241900}
-  particleSystem: {fileID: 6442035757621131935}
+  particle: {fileID: 6442035757621131935}
 --- !u!114 &7562239264209880054
 MonoBehaviour:
   m_ObjectHideFlags: 0
