@@ -240,7 +240,6 @@ MonoBehaviour:
   padding: {x: 0.11, y: 0.21}
   cellSize: 1
   spawnYOffset: 1.5
-  dropDelay: 0
 --- !u!1 &356803690
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,6 +938,18 @@ PrefabInstance:
     - target: {fileID: 3428143518754226970, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3428143518754227045, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 3428143518754227045, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3428143518754227045, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1348477837
       objectReference: {fileID: 0}
     - target: {fileID: 3428143518754227046, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
       propertyPath: m_Pivot.x
