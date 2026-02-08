@@ -49,7 +49,6 @@ public class Rocket : TileBase, IClickable
           float timePerUnit = duration / GetDistance();
           
           EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration, timePerUnit));
-          EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
 
           AnimateRocket();
       }

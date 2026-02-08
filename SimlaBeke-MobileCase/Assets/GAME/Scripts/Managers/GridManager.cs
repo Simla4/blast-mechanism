@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GridManager : MonoBehaviour
+public class GridManager : MonoSingleton<GridManager>
 {
     [Header("Refferances")]
     [SerializeField] private GameSettings gameSettings;
@@ -16,12 +17,12 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Vector2 padding = new Vector2(0.11f, 0.21f);
     [SerializeField] private float cellSize = 1.0f; 
     [SerializeField] private float spawnYOffset = 1.5f;
-    [SerializeField] private float dropDelay = 0.25f;
     
     
     private TileBase[,] gridArray;
     private FloodFillService floodFill;
     private LevelData levelData;
+    private List<TileBase> explodableTiles = new List<TileBase>();
     private EventListener<OnDuckCollectEvent> onDuckCollected;
     private EventListener<OnClickedTileEvent> onClickedTile;
     private EventListener<OnRocketActivated> onRocketActivated;
@@ -87,40 +88,37 @@ public class GridManager : MonoBehaviour
         floodFill = new FloodFillService(gridArray);
     }
     
-    public void OnBlockClicked(OnClickedTileEvent e)
+    private void OnBlockClicked(OnClickedTileEvent e)
     {
-        var foundTiles = floodFill.Find(e.position);
+        explodableTiles  = floodFill.Find(e.position);
 
-        if (foundTiles != null)
+        if (explodableTiles.Count() >= 2)
         {
-            DestroyBlocks(foundTiles);
+            DestroyBlocks(explodableTiles);
         }
     }
 
     private void DestroyBlocks(List<TileBase> foundTiles)
     {
-        if (foundTiles.Count >= 2)
+        EventBus<OnMoveCountChnagedEvent>.Emit(onMoveCountChnaged);
+        for (int i = 0; i < foundTiles.Count; i++)
         {
-            EventBus<OnMoveCountChnagedEvent>.Emit(onMoveCountChnaged);
-            for (int i = 0; i < foundTiles.Count; i++)
+            var foundTile = foundTiles[i];
+            gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
+            if (foundTile.TryGetComponent<IMatchable>(out IMatchable matchable))
             {
-                var foundTile = foundTiles[i];
-                gridArray[foundTile.TilePosition.x, foundTile.TilePosition.y] = null;
-                if (foundTile.TryGetComponent<IMatchable>(out IMatchable matchable))
-                {
-                    matchable.ExplodeTile();
-                }
+                matchable.ExplodeTile();
             }
-            
-            foreach (var foundTile in foundTiles)
-            {
-                NotifyNeighbors(foundTile.TilePosition);
-            }
-            
-            CheckAndSpawnPowerUp(foundTiles.Count, foundTiles[0].TilePosition);
-
-            DropTiles();
         }
+            
+        foreach (var foundTile in foundTiles)
+        {
+            NotifyNeighbors(foundTile.TilePosition);
+        }
+            
+        CheckAndSpawnPowerUp(foundTiles.Count, foundTiles[0].TilePosition);
+
+        DropTiles();
     }
 
     private void CheckAndSpawnPowerUp(int count, Vector2Int pos)
@@ -156,15 +154,12 @@ public class GridManager : MonoBehaviour
 
         foreach (var targetPos in neighbors)
         {
-            // 1. Grid sınırları içinde mi?
             if (IsInsideGrid(targetPos))
             {
                 TileBase neighborTile = gridArray[targetPos.x, targetPos.y];
 
-                // 2. Orada bir taş var mı ve bu taş patlamayla ilgileniyor mu?
                 if (neighborTile != null && neighborTile is IExplodable listener)
                 {
-                    // 3. Kararı ona bırakıyoruz!
                     listener.OnNeighborExploded();
                     gridArray[targetPos.x, targetPos.y] = null;
                 }
@@ -263,29 +258,40 @@ public class GridManager : MonoBehaviour
     
     private void ClearRow(Vector2Int rocketPos, float timePerUnit)
     {
+        explodableTiles.Clear();
+        
         for (int x = 0; x < levelData.gridWidth; x++)
         {
             if(rocketPos.x == x) continue;
 
             float distance = Mathf.Abs(x - rocketPos.x);
-        
-            float delay = distance * 0.08f; 
-
+            float delay = distance * timePerUnit; 
+            
+            explodableTiles.Add(gridArray[x, rocketPos.y]);
+            
             StartCoroutine(DelayedClearAt(x, rocketPos.y, RocketDirections.Horizontal, delay));
         }
+        EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
+
     }
 
     private void ClearColumn(Vector2Int rocketPos, float timePerUnit)
     {
+        explodableTiles.Clear();
+        
         for (int y = 0; y < levelData.gridHeight; y++)
         {
             if(rocketPos.y == y) continue;
 
             float distance = Mathf.Abs(y - rocketPos.y);
-            float delay = distance * 0.08f;
+            float delay = distance * timePerUnit;
+            
+            explodableTiles.Add(gridArray[rocketPos.x, y]);
 
             StartCoroutine(DelayedClearAt(rocketPos.x, y, RocketDirections.Vertical, delay));
         }
+        
+        EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
     }
     
     private IEnumerator DelayedClearAt(int x, int y, RocketDirections direction, float delay)
@@ -323,7 +329,6 @@ public class GridManager : MonoBehaviour
         {
             matchable.ExplodeTile();
         }
-        
         gridArray[x, y] = null;
     }
     
@@ -334,10 +339,13 @@ public class GridManager : MonoBehaviour
     
     public Vector3 GetWorldPosition(Vector2Int gridPos)
     {
-        // Formül: (Grid Koordinatı * Hücre Boyutu) + Board Boşluğu + (Hücre Boyutu / 2)
-        // Bu formül sayesinde blok boyutu değişse de pivot Center'da kalsa da her şey milimetrik oturur.
         float x = (gridPos.x * cellSize) + padding.x + (cellSize / 2f);
         float y = (gridPos.y * cellSize) + padding.y + (cellSize / 2f);
         return new Vector3(x, y, 0);
+    }
+
+    public List<TileBase> GetExplodableTiles()
+    {
+        return explodableTiles;
     }
 }

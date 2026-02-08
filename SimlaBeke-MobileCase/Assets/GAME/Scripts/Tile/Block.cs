@@ -15,7 +15,7 @@ public class Block : TileBase, IMatchable, IClickable
             blockParticle.Init(tileData.tileColor);
         }
         
-        FloatingBlockManager.Instance.TryToSpawnFloatingBlock(this);
+        //FloatingBlockManager.Instance.TryToSpawnFloatingBlock(this);
         
         var tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);
