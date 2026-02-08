@@ -60,7 +60,6 @@ public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
         {
             if (goal.goalType.tileType == TileTypes.Cube && goal.goalType.tileId == tile.GetTileID())
             {
-                Debug.Log("goal type: " + goal.goalType.tileType  + ", goal id: " + goal.goalType.tileId + ", tile type: " + tile.GetTileData().tileType + ", tile id: " + tile.GetTileData().tileId);
                 return true;
             }
         }

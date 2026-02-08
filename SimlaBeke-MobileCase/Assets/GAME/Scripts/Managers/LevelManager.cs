@@ -50,6 +50,11 @@ public class LevelManager : MonoSingleton<LevelManager>
     {
         remainingMoveCount--;
         EventBus<ChangeMoveCountUIEvent>.Emit(new ChangeMoveCountUIEvent( remainingMoveCount));
+
+        if (remainingMoveCount <= 0)
+        {
+            EventBus<LevelCompletedEvent>.Emit(new LevelCompletedEvent(false));
+        }
     }
 
     private void CheckGoals(OnBlockCollected e)
@@ -58,18 +63,31 @@ public class LevelManager : MonoSingleton<LevelManager>
         {
             if (e.tileData.tileId == remainingGoals[i].goalType.tileId)
             {
-                // 1. Önce hafızadaki değeri azalt
                 remainingGoals[i].count--; 
             
-                // 2. Azalmış olan yeni değeri bir değişkene al
                 int updatedCount = remainingGoals[i].count;
 
-                // 3. UI'ya bu taze değeri gönder
                 EventBus<ChangeGoalsUIEvent>.Emit(new ChangeGoalsUIEvent(updatedCount, remainingGoals[i].goalType));
+                CheckLevelSuccess();
             
                 break;
             }
         }
+    }
+
+    private void CheckLevelSuccess()
+    {
+        var spawnedGoals = UIManager.Instance.GetSpawnedGoals();
+        
+        for(int i = 0; i < spawnedGoals.Count; i++)
+        {
+            if (!spawnedGoals[i].IsDone())
+            {
+                return;
+            }
+        }
+        
+        EventBus<LevelCompletedEvent>.Emit(new LevelCompletedEvent(true));
     }
 
     public List<LevelGoals> GetGoals()

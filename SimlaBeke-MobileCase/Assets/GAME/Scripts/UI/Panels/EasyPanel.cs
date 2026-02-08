@@ -38,10 +38,10 @@ namespace Base.UI
             switch (panelAnimationTypes)
             {
                 case PanelAnimationTypes.Fade:
-                    FadePanel(1, 0.25f, ShowPanel);
+                    FadePanel(1, 1f, ShowPanel);
                     break;
                 case PanelAnimationTypes.Scale:
-                    ScalePanel(true, 0.25f);
+                    ScalePanel(true, 1f);
                     break;
             }
         }

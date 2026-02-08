@@ -14,6 +14,7 @@ public class GoalUIElement : MonoBehaviour
     
     private Tween punchTween;
     private TileData tileData;
+    private bool isDone = false;
     
     public string TargetTileId { get; private set; }
 
@@ -32,6 +33,8 @@ public class GoalUIElement : MonoBehaviour
 
     public void UpdateUI(int remaining)
     {
+        if(isDone) return;
+        
         if (punchTween != null)
         {
             punchTween.Kill();
@@ -41,6 +44,7 @@ public class GoalUIElement : MonoBehaviour
         {
             countText.gameObject.SetActive(false);
             tickImage.gameObject.SetActive(true);
+            isDone = true;
             return;
         }
         
@@ -54,5 +58,10 @@ public class GoalUIElement : MonoBehaviour
     public RectTransform GetRectTransform()
     {
         return rectTransform;
+    }
+
+    public bool IsDone()
+    {
+        return isDone;
     }
 }
