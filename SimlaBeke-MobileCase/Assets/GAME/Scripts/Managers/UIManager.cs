@@ -51,21 +51,21 @@ public class UIManager : MonoSingleton<UIManager>
         foreach (var goal in e.levelGoals)
         {
             var newGoal = Instantiate(goalPrefab, goalsContainer);
-            newGoal.Initialize(goal.goalType.tileId, goal.goalType.tileIcon, goal.count);
+            newGoal.Initialize(goal.goalType, goal.count);
             spawnedGoals.Add(newGoal);
         }
     }
 
-    public void OnGoalChanged(ChangeGoalsUIEvent e)
+    private void OnGoalChanged(ChangeGoalsUIEvent e)
     {
-        var element = spawnedGoals.Find(x => x.TargetTileId == e.TileData.tileId);
+        var element = spawnedGoals.Find(x => x.TargetTileId == e.tileData.tileId);
         if (element != null)
         {
             element.UpdateUI(e.newGoal);
         }
     }
 
-    public void OnMoveCountChanged(ChangeMoveCountUIEvent e)
+    private void OnMoveCountChanged(ChangeMoveCountUIEvent e)
     {
         moveCountText.text = e.newValue.ToString();
     }
@@ -81,6 +81,11 @@ public class UIManager : MonoSingleton<UIManager>
         }
         
         return null;
+    }
+
+    public List<GoalUIElement> GetSpawnedGoals()
+    {
+        return spawnedGoals;
     }
     
     public void ShowPanel(PanelID panelID)
