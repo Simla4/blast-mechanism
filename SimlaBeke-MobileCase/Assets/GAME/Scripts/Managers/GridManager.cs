@@ -272,7 +272,6 @@ public class GridManager : MonoSingleton<GridManager>
             StartCoroutine(DelayedClearAt(x, rocketPos.y, RocketDirections.Horizontal, delay));
         }
         EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
-
     }
 
     private void ClearColumn(Vector2Int rocketPos, float timePerUnit)

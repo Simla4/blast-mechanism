@@ -13,6 +13,20 @@ public class LevelData : ScriptableObject
     public List<TileData> tiles;
     public List<TileData> spawnableTileTypes;
     public List<LevelGoals> levelGoals;
+    
+    public void EnsureGrid()
+    {
+        int size = gridWidth * gridHeight;
+
+        if (tiles == null)
+            tiles = new List<TileData>();
+
+        while (tiles.Count < size)
+            tiles.Add(null);
+
+        if (tiles.Count > size)
+            tiles.RemoveRange(size, tiles.Count - size);
+    }
 }
 
 [Serializable]
