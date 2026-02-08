@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
@@ -10,7 +8,6 @@ using Random = UnityEngine.Random;
 public class GridManager : MonoBehaviour
 {
     [Header("Refferances")]
-    [SerializeField] private LevelData levelData;
     [SerializeField] private GameSettings gameSettings;
     [SerializeField] private SpriteRenderer borderSpriteRenderer;
     [SerializeField] private Transform tilesParent;
@@ -24,6 +21,7 @@ public class GridManager : MonoBehaviour
     
     private TileBase[,] gridArray;
     private FloodFillService floodFill;
+    private LevelData levelData;
     private EventListener<OnDuckCollectEvent> onDuckCollected;
     private EventListener<OnClickedTileEvent> onClickedTile;
     private EventListener<OnRocketActivated> onRocketActivated;
@@ -54,6 +52,7 @@ public class GridManager : MonoBehaviour
     
     private void Awake()
     {
+        levelData = LevelManager.Instance.GetLevelData();
         ChangeBorderSize();
     }
 

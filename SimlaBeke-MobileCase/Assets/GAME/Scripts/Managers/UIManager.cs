@@ -8,6 +8,7 @@ public class UIManager : MonoSingleton<UIManager>
 {
     [Header("Move Settings")]
     [SerializeField] private TextMeshProUGUI moveCountText;
+    [SerializeField] private GameObject uiPrefab;
     
     [Header("Goal Settings")]
     [SerializeField] private Transform goalsContainer;
@@ -17,6 +18,7 @@ public class UIManager : MonoSingleton<UIManager>
     private EventListener<OnGameStartEvent> onGameStart;
     private EventListener<ChangeGoalsUIEvent> onChangeGoals;
     private EventListener<ChangeMoveCountUIEvent> onChangeMoveCount;
+    public Dictionary<PanelID, IPanel> PanelsByID { get; private set; } = new();
 
     private void OnEnable()
     {
@@ -35,6 +37,11 @@ public class UIManager : MonoSingleton<UIManager>
         EventBus<OnGameStartEvent>.RemoveListener(onGameStart);
         EventBus<ChangeGoalsUIEvent>.RemoveListener(onChangeGoals);
         EventBus<ChangeMoveCountUIEvent>.RemoveListener(onChangeMoveCount);
+    }
+    
+    private void Awake()
+    {
+        DontDestroyOnLoad(uiPrefab);
     }
 
     public void SetupUI(OnGameStartEvent e)
@@ -75,4 +82,57 @@ public class UIManager : MonoSingleton<UIManager>
         
         return null;
     }
+    
+    public void ShowPanel(PanelID panelID)
+    {
+        if (!PanelsByID.ContainsKey(panelID))
+            return;
+
+        PanelsByID[panelID].ShowPanelAnimated();
+    }
+
+    public void HidePanel(PanelID panelID)
+    {
+        if (!PanelsByID.ContainsKey(panelID))
+            return;
+
+        PanelsByID[panelID].HidePanelAnimated();
+    }
+
+    public void HideAllPanels()
+    {
+        foreach (var panel in PanelsByID.Values)
+        {
+            panel.HidePanelAnimated();
+        }
+    }
+
+    public void AddPanel(IPanel panel)
+    {
+        if (PanelsByID.ContainsKey(panel.PanelID))
+            return;
+
+        PanelsByID.Add(panel.PanelID, panel);
+    }
+
+    public void RemovePanel(IPanel panel)
+    {
+        if (!PanelsByID.ContainsKey(panel.PanelID))
+            return;
+
+        PanelsByID.Remove(panel.PanelID);
+    }
+    
+}
+
+
+public enum PanelID
+{
+    WinPanel = 4,
+    LosePanel = 5
+}
+public enum PanelAnimationTypes
+{
+    Fade,
+    Scale,
 }

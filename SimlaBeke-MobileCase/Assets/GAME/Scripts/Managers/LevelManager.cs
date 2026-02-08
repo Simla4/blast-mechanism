@@ -77,4 +77,9 @@ public class LevelManager : MonoSingleton<LevelManager>
         return levelData.levelGoals;
         
     }
+
+    public LevelData GetLevelData()
+    {
+        return levelData;
+    }
 }
