@@ -55,8 +55,6 @@ public class GoalUIElement : MonoBehaviour
         
         DOVirtual.DelayedCall((FloatingBlockManager.Instance.GetBlockCount() * 0.1f)+ 0.5f, () =>
         {
-            Debug.Log(FloatingBlockManager.Instance.GetBlockCount());
-            
             particle.Play();
         });
     }

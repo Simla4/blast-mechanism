@@ -30,4 +30,10 @@ public class LosePanelControl : MonoBehaviour
             UIManager.Instance.ShowPanel(PanelID.LosePanel);
         }
     }
+
+    public void HideLosePanel()
+    {
+        UIManager.Instance.HideAllPanels();
+        UIManager.Instance.ShowPanel(PanelID.LosePanel);
+    }
 }

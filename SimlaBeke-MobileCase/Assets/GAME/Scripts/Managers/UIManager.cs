@@ -46,6 +46,14 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void SetupUI(OnGameStartEvent e)
     {
+        //Pool'a bağla
+        
+        foreach (var goal in spawnedGoals)
+        {
+            Destroy(goal.gameObject);
+        }
+        spawnedGoals.Clear();
+
         moveCountText.text = e.moves.ToString();
 
         foreach (var goal in e.levelGoals)
@@ -55,6 +63,7 @@ public class UIManager : MonoSingleton<UIManager>
             spawnedGoals.Add(newGoal);
         }
     }
+
 
     private void OnGoalChanged(ChangeGoalsUIEvent e)
     {

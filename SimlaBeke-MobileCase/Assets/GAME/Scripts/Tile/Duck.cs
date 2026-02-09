@@ -1,4 +1,5 @@
 
+using DG.Tweening;
 using sb.eventbus;
 using UnityEngine;
 
@@ -23,12 +24,20 @@ public class Duck : TileBase
         if (TilePosition.y == 0)
         {
             
-            var blockPool = PoolManager.Instance.GetPool(GetTileID());
-            blockPool.ReturnToPool(this);
+            DOVirtual.DelayedCall(0.05f, () =>
+            {
+                transform.DOScale(0, 0.2f)
+                    .SetEase(Ease.InBack)
+                    .OnComplete(() =>
+                    {
+                        var blockPool = PoolManager.Instance.GetPool(GetTileID());
+                        blockPool.ReturnToPool(this);
             
-            SoundManager.PlaySound("duck");
+                        SoundManager.PlaySound("duck");
             
-            EventBus<OnDuckCollectEvent>.Emit(new OnDuckCollectEvent(this));
+                        EventBus<OnDuckCollectEvent>.Emit(new OnDuckCollectEvent(this));
+                    });
+            });
         }
     }
 }
