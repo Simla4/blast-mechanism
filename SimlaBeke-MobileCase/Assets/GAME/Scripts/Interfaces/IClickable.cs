@@ -1,5 +1,5 @@
 
 public interface IClickable
 {
-    void OnClickedTileEvent();
+    void OnClickedTileEvent(bool isChainReaction);
 }

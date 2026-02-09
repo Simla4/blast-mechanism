@@ -44,11 +44,15 @@ public class Rocket : TileBase, IClickable
           SetupVisuals();
       }
 
-      public void OnClickedTileEvent()
+      public void OnClickedTileEvent(bool isChainReaction)
       {
           float timePerUnit = duration / GetDistance();
-          
           EventBus<OnRocketActivated>.Emit(new OnRocketActivated(TilePosition, direction, duration, timePerUnit));
+          
+          if (!isChainReaction)
+          {
+              EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
+          }
 
           AnimateRocket();
       }

@@ -100,7 +100,9 @@ public class GridManager : MonoSingleton<GridManager>
 
     private void DestroyBlocks(List<TileBase> foundTiles)
     {
+        EventBus<OnExplotedTileListUpeded>.Emit(new OnExplotedTileListUpeded());
         EventBus<OnMoveCountChnagedEvent>.Emit(onMoveCountChnaged);
+        
         for (int i = 0; i < foundTiles.Count; i++)
         {
             var foundTile = foundTiles[i];
@@ -271,7 +273,7 @@ public class GridManager : MonoSingleton<GridManager>
             
             StartCoroutine(DelayedClearAt(x, rocketPos.y, RocketDirections.Horizontal, delay));
         }
-        EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
+        EventBus<OnExplotedTileListUpeded>.Emit(new OnExplotedTileListUpeded());
     }
 
     private void ClearColumn(Vector2Int rocketPos, float timePerUnit)
@@ -290,7 +292,7 @@ public class GridManager : MonoSingleton<GridManager>
             StartCoroutine(DelayedClearAt(rocketPos.x, y, RocketDirections.Vertical, delay));
         }
         
-        EventBus<OnMoveCountChnagedEvent>.Emit(new OnMoveCountChnagedEvent());
+        EventBus<OnExplotedTileListUpeded>.Emit(new OnExplotedTileListUpeded());
     }
     
     private IEnumerator DelayedClearAt(int x, int y, RocketDirections direction, float delay)
@@ -310,11 +312,10 @@ public class GridManager : MonoSingleton<GridManager>
             if (rocket.Direction == direction)
             {
                 PoolManager.Instance.GetPool(tile.GetTileID()).ReturnToPool(tile);
-                
             }
             else
             {
-                rocket.OnClickedTileEvent();
+                rocket.OnClickedTileEvent(true);
             }
             
         }

@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
 
         if (hit.collider.TryGetComponent<IClickable>(out var clickable))
         {
-            clickable.OnClickedTileEvent();
+            clickable.OnClickedTileEvent(false);
         }
     }
 }
