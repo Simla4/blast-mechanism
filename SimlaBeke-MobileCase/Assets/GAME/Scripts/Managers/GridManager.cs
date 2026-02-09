@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ public class GridManager : MonoSingleton<GridManager>
     private EventListener<OnDuckCollectEvent> onDuckCollected;
     private EventListener<OnClickedTileEvent> onClickedTile;
     private EventListener<OnRocketActivated> onRocketActivated;
+    private EventListener<OnGameStartEvent> onGameStart;
 
     private OnAnyBlockFallEvent onAnyBlockFall = new OnAnyBlockFallEvent();
     private OnMoveCountChnagedEvent onMoveCountChnaged = new OnMoveCountChnagedEvent();
@@ -42,6 +44,9 @@ public class GridManager : MonoSingleton<GridManager>
 
         onRocketActivated = new EventListener<OnRocketActivated>(HandleRocketActivated);
         EventBus<OnRocketActivated>.AddListener(onRocketActivated);
+
+        onGameStart = new EventListener<OnGameStartEvent>(ChangeBorderSize);
+        EventBus<OnGameStartEvent>.AddListener(onGameStart);
     }
     
     private void OnDisable()
@@ -49,28 +54,31 @@ public class GridManager : MonoSingleton<GridManager>
         EventBus<OnDuckCollectEvent>.RemoveListener(onDuckCollected);
         EventBus<OnClickedTileEvent>.RemoveListener(onClickedTile);
         EventBus<OnRocketActivated>.RemoveListener(onRocketActivated);
+        EventBus<OnGameStartEvent>.RemoveListener(onGameStart);
     }
     
-    private void Awake()
-    {
-        levelData = LevelManager.Instance.GetLevelData();
-        ChangeBorderSize();
-    }
+    
 
-    private void Start()
+    private void ChangeBorderSize(OnGameStartEvent e)
     {
-        gridArray = new TileBase[levelData.gridWidth, levelData.gridHeight];
+        ClearGrid();
+
+        levelData = LevelManager.Instance.GetLevelData();
+        borderSpriteRenderer.size = new Vector2(
+            levelData.gridWidth + padding.x * 2,
+            levelData.gridHeight + padding.y * 2
+        );
         
         CreateBord();
     }
 
-    private void ChangeBorderSize()
-    {
-        borderSpriteRenderer.size = new Vector2(levelData.gridWidth + padding.x * 2, levelData.gridHeight + padding.y * 2);
-    }
 
     private void CreateBord()
     {
+        levelData = LevelManager.Instance.GetLevelData();
+
+        gridArray = new TileBase[levelData.gridWidth, levelData.gridHeight];
+        
         for (int i = 0; i < levelData.tiles.Count; i++)
         {
             int x = i % levelData.gridWidth;
@@ -331,6 +339,28 @@ public class GridManager : MonoSingleton<GridManager>
         }
         gridArray[x, y] = null;
     }
+    
+    public void ClearGrid()
+    {
+        if (gridArray == null) return;
+
+        for (int x = 0; x < gridArray.GetLength(0); x++)
+        {
+            for (int y = 0; y < gridArray.GetLength(1); y++)
+            {
+                if (gridArray[x, y] != null)
+                {
+                    PoolManager.Instance
+                        .GetPool(gridArray[x, y].GetTileID())
+                        .ReturnToPool(gridArray[x, y]);
+                }
+            }
+        }
+
+        explodableTiles.Clear();
+        Array.Clear(gridArray, 0, gridArray.Length);
+    }
+
     
     private bool IsInsideGrid(Vector2Int pos)
     {

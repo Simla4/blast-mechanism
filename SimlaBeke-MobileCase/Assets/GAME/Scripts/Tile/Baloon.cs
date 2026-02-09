@@ -9,14 +9,14 @@ public class Baloon : TileBase, IExplodable
 {
     Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 
-    private bool _isDestroyed = false;
+    
     private Pool<TileBase> tilePool;
 
     public void OnNeighborExploded()
     {
-        if (_isDestroyed) return;
+        if (isDestroyed) return;
         
-        _isDestroyed = true;
+        isDestroyed = true;
         
         SoundManager.PlaySound("balloon");
         
@@ -26,6 +26,8 @@ public class Baloon : TileBase, IExplodable
             blockParticle.Init(tileData.tileColor);
             particle.SetActive(true);
         }
+        
+        EventBus<OnBlockCollected>.Emit(new OnBlockCollected(tileData));
         
         tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);

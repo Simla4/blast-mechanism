@@ -6,6 +6,7 @@ using UnityEngine;
 public class Duck : TileBase
 {
     private EventListener<OnAnyBlockFallEvent> onChangeAnyBlockFall;
+    private Tween scaleTween;
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -23,21 +24,24 @@ public class Duck : TileBase
     {
         if (TilePosition.y == 0)
         {
-            
-            DOVirtual.DelayedCall(0.05f, () =>
+            if (scaleTween != null)
             {
-                transform.DOScale(0, 0.2f)
+                scaleTween.Kill();
+            }
+            
+            scaleTween = transform.DOScale(0, 0.2f)
                     .SetEase(Ease.InBack)
                     .OnComplete(() =>
                     {
+                        EventBus<OnBlockCollected>.Emit(new OnBlockCollected(tileData));
+                        
                         var blockPool = PoolManager.Instance.GetPool(GetTileID());
                         blockPool.ReturnToPool(this);
             
                         SoundManager.PlaySound("duck");
-            
+                        
                         EventBus<OnDuckCollectEvent>.Emit(new OnDuckCollectEvent(this));
                     });
-            });
         }
     }
 }

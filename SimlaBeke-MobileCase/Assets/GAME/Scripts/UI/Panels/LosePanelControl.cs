@@ -34,6 +34,6 @@ public class LosePanelControl : MonoBehaviour
     public void HideLosePanel()
     {
         UIManager.Instance.HideAllPanels();
-        UIManager.Instance.ShowPanel(PanelID.LosePanel);
+        UIManager.Instance.HidePanel(PanelID.LosePanel);
     }
 }

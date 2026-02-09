@@ -15,6 +15,7 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
     [SerializeField] protected GameObject blastParticle;
     
     protected TileData tileData;
+    protected bool isDestroyed = false;
     
     private SpriteRenderer spriteRenderer;
     private string currentTileDataId;
@@ -42,12 +43,14 @@ public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
     
         spriteRenderer.sortingOrder = position.y;
         
+        isDestroyed = false;
+        transform.localScale = Vector3.one;
+        
         Inıt();
     }
 
     public void OnDespawned()
     {
-        EventBus<OnBlockCollected>.Emit(new OnBlockCollected(tileData));
         gameObject.SetActive(false);
     }
 

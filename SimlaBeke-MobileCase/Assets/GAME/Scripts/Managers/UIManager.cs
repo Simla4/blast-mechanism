@@ -44,13 +44,11 @@ public class UIManager : MonoSingleton<UIManager>
         DontDestroyOnLoad(uiPrefab);
     }
 
-    public void SetupUI(OnGameStartEvent e)
+    private void SetupUI(OnGameStartEvent e)
     {
-        //Pool'a bağla
-        
-        foreach (var goal in spawnedGoals)
+        foreach (Transform child in goalsContainer)
         {
-            Destroy(goal.gameObject);
+            Destroy(child.gameObject);
         }
         spawnedGoals.Clear();
 

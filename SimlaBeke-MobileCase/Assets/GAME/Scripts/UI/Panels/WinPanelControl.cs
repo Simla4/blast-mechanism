@@ -37,6 +37,6 @@ public class WinPanelControl : MonoBehaviour
     public void HideWinPanel()
     {
         UIManager.Instance.HideAllPanels();
-        UIManager.Instance.ShowPanel(PanelID.WinPanel);
+        UIManager.Instance.HidePanel(PanelID.WinPanel);
     }
 }

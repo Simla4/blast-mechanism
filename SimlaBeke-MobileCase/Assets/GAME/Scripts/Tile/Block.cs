@@ -15,6 +15,8 @@ public class Block : TileBase, IMatchable, IClickable
             blockParticle.Init(tileData.tileColor);
         }
         
+        EventBus<OnBlockCollected>.Emit(new OnBlockCollected(tileData));
+        
         var tilePool = PoolManager.Instance.GetPool(GetTileID());
         tilePool.ReturnToPool(this);
     }
