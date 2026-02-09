@@ -109,7 +109,6 @@ public class GridManager : MonoSingleton<GridManager>
     private void DestroyBlocks(List<TileBase> foundTiles)
     {
         EventBus<OnExplotedTileListUpeded>.Emit(new OnExplotedTileListUpeded());
-        EventBus<OnMoveCountChnagedEvent>.Emit(onMoveCountChnaged);
         
         for (int i = 0; i < foundTiles.Count; i++)
         {
@@ -127,7 +126,7 @@ public class GridManager : MonoSingleton<GridManager>
         }
             
         CheckAndSpawnPowerUp(foundTiles.Count, foundTiles[0].TilePosition);
-
+        EventBus<OnMoveCountChnagedEvent>.Emit(onMoveCountChnaged);
         DropTiles();
     }
 

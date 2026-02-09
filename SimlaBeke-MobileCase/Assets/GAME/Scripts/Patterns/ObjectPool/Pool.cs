@@ -19,18 +19,6 @@ public class Pool<T> : PoolBase where T : Component
         _prefab = prefab;
     }
 
-    public bool IsListEmpty()
-    {
-        if (active.Count == 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public T Spawn(Vector2Int position, TileData tileData)
     {
         if (inactive.Count > 0)
@@ -61,9 +49,8 @@ public class Pool<T> : PoolBase where T : Component
         T item = obj as T;
         if (item == null) return;
 
-        // 🔥 KRİTİK KONTROL
         if (inactive.Contains(item))
-            return; // zaten pool'da, ikinci kez sokma
+            return;
 
         active.Remove(item);
 

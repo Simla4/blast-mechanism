@@ -257,9 +257,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: LoadNextLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3896186900435653262}
         m_TargetAssemblyTypeName: WinPanelControl, Assembly-CSharp
-        m_MethodName: NextLevelButton
+        m_MethodName: HideWinPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -652,7 +664,7 @@ Canvas:
   m_GameObject: {fileID: 3428143518754226970}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -662,7 +674,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1348477837
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &3428143518754227044
@@ -718,7 +730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveCountText: {fileID: 3428143520310842358}
-  uiPrefab: {fileID: 0}
+  uiPrefab: {fileID: 3428143518754226970}
   goalsContainer: {fileID: 3428143519716616111}
   goalPrefab: {fileID: 4817814528603241903, guid: 45d4ebfaf832f4be7a538e5611e7c997, type: 3}
 --- !u!1 &3428143519716616110
@@ -956,7 +968,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 415.60507, y: 952.20807}
+  m_AnchoredPosition: {x: 422.46, y: 961.1}
   m_SizeDelta: {x: 135.9992, y: 101.9616}
   m_Pivot: {x: 1.235051, y: 1.2298057}
 --- !u!222 &3428143520310842359
@@ -1722,7 +1734,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 462106498293873736}
         m_TargetAssemblyTypeName: LosePanelControl, Assembly-CSharp
-        m_MethodName: RestartLevelButton
+        m_MethodName: HideLosePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: RetryLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
