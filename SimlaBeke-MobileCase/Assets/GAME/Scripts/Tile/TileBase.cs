@@ -4,6 +4,10 @@ using sb.eventbus;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// Tile behaviors are currently resolved by GridManager.
+// With more time, responsibility would be shifted to tiles themselves
+// to reduce conditional logic and improve extensibility.
+
 [RequireComponent(typeof(SpriteRenderer))]
 public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 {

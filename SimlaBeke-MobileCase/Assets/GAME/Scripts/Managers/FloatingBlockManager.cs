@@ -13,36 +13,44 @@ public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
     [SerializeField] private GameObject floatingBlockPrefab;
     [SerializeField] private Canvas canvas;
 
-    private EventListener<OnMoveCountChnagedEvent> onClickedTileEvent;
-    private List<TileBase> explodableTiles = new List<TileBase>();
+    private EventListener<OnExplotedTileListUpeded> onClickedTileEvent;
+    private List<TileBase> validGoals = new List<TileBase>();
     private Tween moveTween;
 
     private void OnEnable()
     {
-        onClickedTileEvent = new EventListener<OnMoveCountChnagedEvent>(TryToSpawnFloatingBlock);
-        EventBus<OnMoveCountChnagedEvent>.AddListener(onClickedTileEvent);
+        onClickedTileEvent = new EventListener<OnExplotedTileListUpeded>(TryToSpawnFloatingBlock);
+        EventBus<OnExplotedTileListUpeded>.AddListener(onClickedTileEvent);
     }
 
     private void OnDisable()
     {
-        EventBus<OnMoveCountChnagedEvent>.RemoveListener(onClickedTileEvent);
+        EventBus<OnExplotedTileListUpeded>.RemoveListener(onClickedTileEvent);
     }
 
-    private void TryToSpawnFloatingBlock(OnMoveCountChnagedEvent e)
+    private void TryToSpawnFloatingBlock(OnExplotedTileListUpeded e)
     {
         StartCoroutine(TryToSpawnFloatingBlockNumerator());
     }
 
     private IEnumerator TryToSpawnFloatingBlockNumerator()
     {
-        explodableTiles = GridManager.Instance.GetExplodableTiles();
+        var explodableTiles = GridManager.Instance.GetExplodableTiles();
         
+        validGoals.Clear();
+        validGoals = explodableTiles
+            .Where(t => t.GetTileData().tileType == TileTypes.Cube && IsGoal(t))
+            .ToList();
 
-        for (int i = 0; i < explodableTiles.Count; i++)
+        for (int i = 0; i < validGoals.Count; i++)
         {
-            if(!IsGoal(explodableTiles[i])) continue;
+            var uiElement = UIManager.Instance.GetGoalUIElement(validGoals[i].GetTileID());
+
+            if (uiElement.IsDone())
+            {
+                break;
+            }
             
-            var uiElement = UIManager.Instance.GetGoalUIElement(explodableTiles[i].GetTileID());
             var spawnPosition = WorldToUISpace(explodableTiles[i].transform.position);
 
             var floatingBlock = LeanPool.Spawn(floatingBlockPrefab, spawnPosition, Quaternion.identity, canvas.transform);
@@ -72,5 +80,10 @@ public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPosition);            
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, screenPos, canvas.worldCamera, out Vector2 localPoint);
         return canvas.transform.TransformPoint(localPoint);
+    }
+
+    public int GetBlockCount()
+    {
+        return validGoals.Count;
     }
 }

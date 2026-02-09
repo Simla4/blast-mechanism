@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class GoalUIElement : MonoBehaviour
@@ -10,7 +11,7 @@ public class GoalUIElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countText;
     [SerializeField] private Image tickImage;
     [SerializeField] private RectTransform rectTransform;
-    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private ParticleSystem particle;
     
     private Tween punchTween;
     private TileData tileData;
@@ -20,7 +21,7 @@ public class GoalUIElement : MonoBehaviour
 
     private void Start()
     {
-        particleSystem.Stop();
+        particle.Stop();
     }
 
     public void Initialize(TileData tileData, int startCount)
@@ -37,7 +38,7 @@ public class GoalUIElement : MonoBehaviour
         
         if (punchTween != null)
         {
-            punchTween.Kill();
+            punchTween.Kill(true);
         }
 
         if (remaining <= 0)
@@ -51,8 +52,13 @@ public class GoalUIElement : MonoBehaviour
         countText.text = remaining.ToString();
         
         punchTween = transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
-
-        particleSystem.Play();
+        
+        DOVirtual.DelayedCall((FloatingBlockManager.Instance.GetBlockCount() * 0.1f)+ 0.5f, () =>
+        {
+            Debug.Log(FloatingBlockManager.Instance.GetBlockCount());
+            
+            particle.Play();
+        });
     }
 
     public RectTransform GetRectTransform()
