@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 public class LevelManager : MonoSingleton<LevelManager>
 {
-    [Header("Refferances")]
+    [Header("References")]
     [SerializeField] private List<LevelData> levels;
     
     private const string LEVEL_INDEX_KEY = "CURRENT_LEVEL_INDEX";

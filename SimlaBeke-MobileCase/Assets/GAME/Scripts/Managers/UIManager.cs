@@ -4,6 +4,10 @@ using sb.eventbus;
 using TMPro;
 using UnityEngine;
 
+// NOTE:
+// Implementing UI Pooling for GoalUIElements to avoid Instantiate/Destroy overhead.
+// Move count and goal text updates will be decoupled from the UIManager.
+
 public class UIManager : MonoSingleton<UIManager>
 {
     [Header("Move Settings")]

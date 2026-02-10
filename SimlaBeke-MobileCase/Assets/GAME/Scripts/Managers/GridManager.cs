@@ -7,9 +7,16 @@ using sb.eventbus;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// NOTE:
+// This GridManager prioritizes a complete and functional gameplay loop.
+// Grid logic would be refactored into smaller systemso improve extensibility and testability.
+// (grid state, resolution, spawning, power-ups).
+// In a production environment this would be split into
+// GridSpawner, GridGravity, and GridRefill services.
+
 public class GridManager : MonoSingleton<GridManager>
 {
-    [Header("Refferances")]
+    [Header("References")]
     [SerializeField] private GameSettings gameSettings;
     [SerializeField] private SpriteRenderer borderSpriteRenderer;
     [SerializeField] private Transform tilesParent;

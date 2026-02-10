@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class PoolManager : MonoSingleton<PoolManager>
 {
+    //NOTE:
+    // Simple pooling solution used for the scope of this case.
+    // Can be replaced with a more generic pool system if needed.
+
     
     private Dictionary<string, PoolBase> allPools = new Dictionary<string, PoolBase>();
 

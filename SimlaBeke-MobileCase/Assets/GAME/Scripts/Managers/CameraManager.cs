@@ -1,21 +1,30 @@
+using System;
+using System.Diagnostics.Tracing;
+using sb.eventbus;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    [Header("Refferances")]
+    [Header("References")]
     [SerializeField] private SpriteRenderer borderSpriteRenderer;
 
-    private void Awake()
+    EventListener<OnGameStartEvent> onGameStart;
+
+    private void OnEnable()
     {
-        ChangeCameraSize();
-        
-        transform.position = new Vector3(borderSpriteRenderer.size.x / 2, borderSpriteRenderer.size.y / 2, transform.position.z);
+        onGameStart = new EventListener<OnGameStartEvent>(ChangeCameraSize);
+        EventBus<OnGameStartEvent>.AddListener(onGameStart);
     }
 
-    private void ChangeCameraSize()
+    private void OnDisable()
     {
-        var borderWidth = LevelManager.Instance.GetLevelData().gridWidth;
+        EventBus<OnGameStartEvent>.RemoveListener(onGameStart);
+    }
 
-        Camera.main.orthographicSize = borderWidth + 1;
+    private void ChangeCameraSize(OnGameStartEvent e)
+    {
+        Camera.main.orthographicSize = borderSpriteRenderer.size.x + 1f;
+        transform.position = new Vector3(borderSpriteRenderer.size.x / 2, borderSpriteRenderer.size.y / 2, transform.position.z);
+
     }
 }

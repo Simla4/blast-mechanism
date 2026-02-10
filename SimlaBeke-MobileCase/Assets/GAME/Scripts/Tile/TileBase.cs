@@ -4,6 +4,11 @@ using sb.eventbus;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// Base class for all tile types.
+// New mechanics (Bomb, DiscoBall, etc.) can be added
+// by extending TileBase and implementing relevant interfaces.
+
+//NOTE:
 // Tile behaviors are currently resolved by GridManager.
 // With more time, responsibility would be shifted to tiles themselves
 // to reduce conditional logic and improve extensibility.
@@ -11,7 +16,7 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public abstract class TileBase : MonoBehaviour, ISpawned, IDespawned
 {
-    [Header("Refferances")]
+    [Header("References")]
     [SerializeField] protected GameObject blastParticle;
     
     protected TileData tileData;

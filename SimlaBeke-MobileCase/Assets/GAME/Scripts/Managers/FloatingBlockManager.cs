@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class FloatingBlockManager : MonoSingleton<FloatingBlockManager>
 {
+    [Header("References")]
     [SerializeField] private GameObject floatingBlockPrefab;
     [SerializeField] private Canvas canvas;
 
