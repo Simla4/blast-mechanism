@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf9ae28a26ff4f03b39adffa7d8aa26, type: 3}
   m_Name: YellowBlock
   m_EditorClassIdentifier: 
-  tileIcon: {fileID: 21300000, guid: a7e0d5f6b637240f692b6660fadad5eb, type: 3}
+  tileIcon: {fileID: 21300000, guid: cce4e68d0c47f4b00b0dc45fd0017b69, type: 3}
   tileId: B-5
   tileType: 0
   tileColor: {r: 0.9529412, g: 0.8509804, b: 0, a: 1}

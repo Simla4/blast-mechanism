@@ -437,6 +437,17 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 3428143518754227045, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
   m_PrefabInstance: {fileID: 3428143519504997668}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &776413387 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1052286046744416099, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
+  m_PrefabInstance: {fileID: 3428143519504997668}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &967090752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,6 +1087,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3428143518754227047, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
+      propertyPath: moveCountText
+      value: 
+      objectReference: {fileID: 776413387}
     - target: {fileID: 3428143519716616111, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -50.400024
@@ -1087,6 +1102,10 @@ PrefabInstance:
     - target: {fileID: 3428143520310842357, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -65.21002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3691324690026200344, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -54.289978
       objectReference: {fileID: 0}
     - target: {fileID: 4958194039201344518, guid: 08401d9101a354b439d23ef78a0412a0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
