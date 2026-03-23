@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1ebe205-383e-445d-963e-e245a2980956" name="Changes" comment="" />
+    <list default="true" id="f4d52655-a18e-491f-8084-f48203cb9d32" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/ART/Images/balloon.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ART/Images/balloon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ART/Images/cube_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ART/Images/cube_1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ART/Images/duck.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ART/Images/duck.png" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,54 +17,27 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Editor/LevelEditorInspector.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Animations/TargetParticle.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Enum/TileTypes.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/ChangeMoveCountUIEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnAnyBlockFallEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnBlockCollected.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnClickedTileEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnExplotedListUpeded.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnGameStartEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnMoveCountChnagedEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Events/OnRocketActivatedEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/FloodFillService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Interfaces/IClickable.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Interfaces/ICommand.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Managers/FloatingBlockManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Managers/GridManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Managers/LevelManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Patterns/EventBus/EventListener.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Patterns/EventBus/IEvent.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/ScriptableObjects/GameSettings.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/ScriptableObjects/PoolConfig.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/ScriptableObjects/TileData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/Tile/MoveCommand.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GAME/Scripts/UI/GoalUIElement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f91c06355a6f4614893ea82b1f9c436915b200/05/bd089ba3/Object.cs" root0="FORCE_HIGHLIGHTING" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
-}</component>
-  <component name="ProjectId" id="397mcSYy3LRR6e2Dbf3Z6gZQOa3" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="3BM4vG2L3XgnFySzdFMpqykdCbf" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/2021.3.45f2/Unity.app/Contents/MacOS/Unity" />
@@ -102,26 +79,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b1ebe205-383e-445d-963e-e245a2980956" name="Changes" comment="" />
-      <created>1770055564571</created>
+      <changelist id="f4d52655-a18e-491f-8084-f48203cb9d32" name="Changes" comment="" />
+      <created>1774285834446</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1770055564571</updated>
-      <workItem from="1770055566643" duration="34894000" />
-      <workItem from="1770192454086" duration="30374000" />
-      <workItem from="1770304226879" duration="92000" />
-      <workItem from="1770304536121" duration="13166000" />
-      <workItem from="1770327332171" duration="2309000" />
-      <workItem from="1770366067384" duration="36935000" />
-      <workItem from="1770455569240" duration="19732000" />
-      <workItem from="1770489489633" duration="10015000" />
-      <workItem from="1770522396234" duration="1072000" />
-      <workItem from="1770523494338" duration="484000" />
-      <workItem from="1770539550242" duration="3355000" />
-      <workItem from="1770547676153" duration="31819000" />
-      <workItem from="1770624697597" duration="11231000" />
-      <workItem from="1770640534871" duration="15121000" />
-      <workItem from="1770822111258" duration="65000" />
+      <updated>1774285834446</updated>
+      <workItem from="1774285836648" duration="2375000" />
     </task>
     <servers />
   </component>
